@@ -2,16 +2,19 @@ CC = g++ --std=c++11
 
 all: a.out
 
-a.out: main.o StreamingService.o UsersRepository.o CommentsRepository.o FilmsRepository.o User.o Publisher.o Film.o Comment.o
-	$(CC) main.o StreamingService.o UsersRepository.o CommentsRepository.o FilmsRepository.o User.o Publisher.o Film.o Comment.o -o a.out
+a.out: main.o StreamingService.o Controller.o UsersRepository.o CommentsRepository.o FilmsRepository.o User.o Publisher.o Film.o Comment.o
+	$(CC) main.o StreamingService.o Controller.o UsersRepository.o CommentsRepository.o FilmsRepository.o User.o Publisher.o Film.o Comment.o -o a.out
 
 main.o: main.cpp StreamingService.h
 	$(CC) -c main.cpp -o main.o
 
-StreamingService.o: StreamingService.cpp StreamingService.h UsersRepository.h CommentsRepository.h FilmsRepository.h Exceptions.h
+StreamingService.o: StreamingService.cpp StreamingService.h Controller.h
 	$(CC) -c StreamingService.cpp -o StreamingService.o
 
-UsersRepository.o: UsersRepository.cpp UsersRepository.h User.h
+Controller.o: Controller.cpp Controller.h UsersRepository.h CommentsRepository.h FilmsRepository.h Exceptions.h
+	$(CC) -c Controller.cpp -o Controller.o
+
+UsersRepository.o: UsersRepository.cpp UsersRepository.h User.h Publisher.h Exceptions.h
 	$(CC) -c UsersRepository.cpp -o UsersRepository.o
 
 FilmsRepository.o: FilmsRepository.cpp FilmsRepository.h Film.h

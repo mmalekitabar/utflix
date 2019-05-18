@@ -3,24 +3,21 @@
 
 #include <iostream>
 #include <string>
+#include <vector>
 
-#include "UsersRepository.h"
-#include "CommentsRepository.h"
-#include "FilmsRepository.h"
-#include "Exceptions.h"
+#include "Controller.h"
 
 class StreamingService
 {
 public:
+	StreamingService();
 	void run();
 	std::string get_input();
 	void check_input(std::string input);
 	void act_on_input(std::string input);
 
 private:
-	UsersRepository users;
-	FilmsRepository films;
-	CommentsRepository comments;
+	Controller controller;
 };
 
 
