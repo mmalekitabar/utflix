@@ -7,12 +7,13 @@
 #include <vector>
 #include <iostream>
 #include "Exceptions.h"
+#include <regex>
 
 class UsersRepository
 {
 public:
 	UsersRepository();
-	void add_user(std::map<std::string, std::string> informations);
+	User* add_user(std::map<std::string, std::string> informations);
 	int id_generator();
 	std::string email_adjust(std::string _email);
 	std::string username_adjust(std::string _username);

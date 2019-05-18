@@ -21,6 +21,7 @@ private:
 	UsersRepository users_repository;
 	CommentsRepository comments_repository;
 	FilmsRepository films_repository;
+	User* loggedin;
 };
 
 
