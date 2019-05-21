@@ -14,6 +14,7 @@ class UsersRepository
 public:
 	UsersRepository();
 	User* add_user(std::map<std::string, std::string> informations);
+	User* login_check(std::map<std::string, std::string> informations);
 	int id_generator();
 	std::string email_adjust(std::string _email);
 	std::string username_adjust(std::string _username);

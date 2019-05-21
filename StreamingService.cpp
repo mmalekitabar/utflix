@@ -72,8 +72,9 @@ void StreamingService::act_on_input(std::string input)
 	std::vector<std::string> temp;
 	for(int i = 0; input.size() > 0; i++)
 	{
-		if(input.substr(0, input.find(' '))!='\0')
-			temp.push_back(input.substr(0, input.find(' ')));
+		std::string part = input.substr(0, input.find(' '));
+		if(part.size() > 0)
+			temp.push_back(part);
 		input.erase(0, temp[i].size() + 1);
 	}
 	controller.act_on(temp);

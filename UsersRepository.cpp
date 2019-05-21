@@ -10,19 +10,32 @@ User* UsersRepository::add_user(std::map<std::string, std::string>  informations
 	if(informations["publisher"] == "true")
 	{
 		users.push_back(new Publisher(id_generator(), email_adjust(informations["email"]), username_adjust(informations["username"]), password_adjust(informations["password"]), age_adjust(informations["age"]), true));
-		return users[last_id];
+		last_id++;
+		return users[last_id - 1];
 	}
 	else
 	{
 		users.push_back(new User(id_generator(), email_adjust(informations["email"]), username_adjust(informations["username"]), password_adjust(informations["password"]), age_adjust(informations["age"]), false));
-		return users[last_id];
+		last_id++;
+		return users[last_id - 1];
 	}
+}
+
+User* UsersRepository::login_check(std::map<std::string, std::string> informations)
+{
+	for(int i = 0; i < users.size(); i++)
+	{
+		if(users[i]->get_username() == informations["username"])
+			if(users[i]->get_password() == informations["password"])
+				return users[i];
+			throw BadRequest(); 
+	}
+	throw NotFound();
 }
 
 int UsersRepository::id_generator()
 {
-	last_id++;
-	return (last_id - 1);
+	return last_id;
 }
 
 std::string UsersRepository::email_adjust(std::string _email)
