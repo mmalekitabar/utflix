@@ -41,13 +41,19 @@ void Controller::act_on(std::vector<std::string> input)
 			if(loggedin->get_id() != films_repository.find_film_pub(informations["film_id"]))
 				throw PermissionDenied();
 			films_repository.edit_film(informations);
+			std::cout << "OK" << std::endl;
 		}
 	}
 	else if(input[0] == "DELETE")
 	{
 		if(input[1] == "films")
 		{
-			
+			for(int i = 4; i < input.size(); i += 2)
+				informations[input[i - 1]] = input[i];
+			if(loggedin->get_id() != films_repository.find_film_pub(informations["film_id"]))
+				throw PermissionDenied();
+			films_repository.delete_film(informations["film_id"]);
+			std::cout << "OK" << std::endl;
 		}
 		else if(input[1] == "comments")
 		{

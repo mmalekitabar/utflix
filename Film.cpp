@@ -12,6 +12,7 @@ Film::Film(int _id, std::string _name, int _year, int _length, int _price, std::
 	director = _director;
 	rate = 0;
 	publisher_id = _publisher_id;
+	sold_out = false;
 }
 
 void Film::change_information(std::map<std::string, std::string> informations)
@@ -28,6 +29,11 @@ void Film::change_information(std::map<std::string, std::string> informations)
 		summary = informations["summary"];
 	if(informations["director"].size() > 0)
 		director = informations["director"];
+}
+
+void Film::sell_out()
+{
+	sold_out = true;
 }
 
 int Film::get_id()
@@ -48,4 +54,9 @@ int Film::is_num(std::string num)
 			return 0;
 	}
 	return 1;
+}
+
+bool Film::sell_status()
+{
+	return !sold_out;
 }

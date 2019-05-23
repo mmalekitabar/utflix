@@ -15,6 +15,7 @@ public:
 	FilmsRepository();
 	void add_film(std::map<std::string, std::string> informations, int publisher_id);
 	void edit_film(std::map<std::string, std::string> informations);
+	void delete_film(std::string film_id);
 	int find_film_pub(std::string film_id);
 	int id_generator();
 	int num_adjust(std::string num);

@@ -24,12 +24,25 @@ void FilmsRepository::edit_film(std::map<std::string, std::string> informations)
 	}
 }
 
-int FilmsRepository::find_film_pub(std::string film_id)
+void FilmsRepository::delete_film(std::string film_id)
 {
 	int f_id = num_adjust(film_id);
 	for(int i = 0; i < films.size(); i++)
 	{
 		if(f_id == films[i]->get_id())
+		{
+			films[i]->sell_out();
+			return;
+		}
+	}
+}
+
+int FilmsRepository::find_film_pub(std::string film_id)
+{
+	int f_id = num_adjust(film_id);
+	for(int i = 0; i < films.size(); i++)
+	{
+		if(f_id == films[i]->get_id() && films[i]->sell_status())
 			return films[i]->get_pub_id();
 	}
 	throw NotFound();
