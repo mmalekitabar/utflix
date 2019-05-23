@@ -17,13 +17,13 @@ Controller.o: Controller.cpp Controller.h UsersRepository.h CommentsRepository.h
 UsersRepository.o: UsersRepository.cpp UsersRepository.h User.h Publisher.h Exceptions.h
 	$(CC) -c UsersRepository.cpp -o UsersRepository.o
 
-FilmsRepository.o: FilmsRepository.cpp FilmsRepository.h Film.h
+FilmsRepository.o: FilmsRepository.cpp FilmsRepository.h Film.h Exceptions.h
 	$(CC) -c FilmsRepository.cpp -o FilmsRepository.o
 
 CommentsRepository.o: CommentsRepository.cpp CommentsRepository.h Comment.h
 	$(CC) -c CommentsRepository.cpp -o CommentsRepository.o
 
-Film.o: Film.cpp Film.h
+Film.o: Film.cpp Film.h Exceptions.h
 	$(CC) -c Film.cpp -o Film.o
 
 User.o: User.cpp User.h

@@ -19,3 +19,13 @@ std::string User::get_password()
 {
 	return password;
 }
+
+int User::get_id()
+{
+	return id;
+}
+
+bool User::is_publisher()
+{
+	return publisher;
+}

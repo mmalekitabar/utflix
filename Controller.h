@@ -9,7 +9,9 @@
 #include "UsersRepository.h"
 #include "CommentsRepository.h"
 #include "FilmsRepository.h"
-#include "Exceptions.h"
+//#include "Exceptions.h"
+
+class Exceptions;
 
 class Controller
 {

@@ -23,6 +23,8 @@ User* UsersRepository::add_user(std::map<std::string, std::string>  informations
 
 User* UsersRepository::login_check(std::map<std::string, std::string> informations)
 {
+	if(informations["username"].size() == 0)
+		throw BadRequest();
 	for(int i = 0; i < users.size(); i++)
 	{
 		if(users[i]->get_username() == informations["username"])
@@ -49,6 +51,8 @@ std::string UsersRepository::email_adjust(std::string _email)
 
 std::string UsersRepository::username_adjust(std::string _username)
 {
+	if(_username.size() == 0)
+		throw BadRequest();
 	for(int i = 0; i < users.size(); i++)
 	{
 		if(users[i]->get_username() == _username)
@@ -59,11 +63,15 @@ std::string UsersRepository::username_adjust(std::string _username)
 
 std::string UsersRepository::password_adjust(std::string _password)
 {
+	if(_password.size() == 0)
+		throw BadRequest();
 	return _password;
 }
 
 int UsersRepository::age_adjust(std::string _age)
 {
+	if(_age.size() == 0)
+		throw BadRequest();
 	for(int i = 0; i < _age.size(); i++)
 	{
 		if(_age[i] > 57 || _age[i] < 48)
