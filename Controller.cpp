@@ -13,7 +13,9 @@ void Controller::act_on(std::vector<std::string> input)
 	{
 		if(input[1] == "followers")
 		{
-
+			if(!(loggedin->is_publisher()))
+				throw PermissionDenied();
+			users_repository.print_by_ids(loggedin->get_followers());
 		}
 		else if(input[1] == "films")
 		{

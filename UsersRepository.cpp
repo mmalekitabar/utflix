@@ -35,6 +35,25 @@ User* UsersRepository::login_check(std::map<std::string, std::string> informatio
 	throw NotFound();
 }
 
+void UsersRepository::print_by_ids(std::vector<int> ids)
+{
+	std::cout << "#. User Id | User Username | User Email" << std::endl;
+	int list_num = 1;
+	for(int i = 0; i < users.size(); i++)
+	{
+		for(int j = 0; j < ids.size(); j++)
+		{
+			if(users[i]->get_id() == ids[j])
+			{
+				std::cout << list_num << ". " << users[i]->get_id() << " | " << users[i]->get_username() << " | " << users[i]->get_email() << std::endl;
+				list_num++;
+				break;
+			}
+		}
+	}
+}
+
+
 int UsersRepository::id_generator()
 {
 	return last_id;

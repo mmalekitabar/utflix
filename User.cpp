@@ -29,3 +29,8 @@ bool User::is_publisher()
 {
 	return publisher;
 }
+
+std::string User::get_email()
+{
+	return email;
+}
