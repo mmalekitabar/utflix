@@ -4,6 +4,7 @@
 #include <string>
 #include <iostream>
 #include <vector>
+#include "Exceptions.h"
 
 class User
 {
@@ -12,10 +13,12 @@ public:
 	std::string get_username();
 	std::string get_password();
 	std::string get_email();
+	void add_money(std::string amount);
+	int num_adjust(std::string num);
 	virtual std::vector<int> get_followers(){};
 	virtual void receive_money(){};
 	virtual std::vector<int> get_films(){};
-	virtual void submit_film(){};
+	virtual void submit_film(int film_id){};
 	int get_id();
 	bool is_publisher();
 private:

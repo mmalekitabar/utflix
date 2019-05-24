@@ -17,6 +17,12 @@ void Controller::act_on(std::vector<std::string> input)
 				throw PermissionDenied();
 			users_repository.print_by_ids(loggedin->get_followers());
 		}
+		else if(input[1] == "published")
+		{
+			if(!(loggedin->is_publisher()))
+				throw PermissionDenied();
+			films_repository.print_for_pub(informations, loggedin->get_films());
+		}
 		else if(input[1] == "films")
 		{
 
@@ -92,14 +98,21 @@ void Controller::act_on(std::vector<std::string> input)
 				throw PermissionDenied();
 			for(int i = 4; i < input.size(); i += 2)
 				informations[input[i - 1]] = input[i];
-			films_repository.add_film(informations, loggedin->get_id());
+			int unsubmitted_film = films_repository.add_film(informations, loggedin->get_id());
+			loggedin->submit_film(unsubmitted_film);
 			std::cout << "OK" << std::endl;
 		}
 		else if(input[1] == "money")
 		{
-			if(!(loggedin->is_publisher()))
+			for(int i = 4; i < input.size(); i += 2)
+				informations[input[i - 1]] = input[i];
+			if(!(loggedin->is_publisher()) && informations["amount"].size() == 0)
 				throw PermissionDenied();
-			loggedin->receive_money();
+			else if(informations["amount"].size() > 0)
+				loggedin->add_money(informations["amount"]);
+			else
+				loggedin->receive_money();
+			std::cout << "OK" << std::endl;
 		}
 		else if(input[1] == "replies")
 		{

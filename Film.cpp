@@ -60,3 +60,33 @@ bool Film::sell_status()
 {
 	return !sold_out;
 }
+
+int Film::get_price()
+{
+	return price;
+}
+
+int Film::get_year()
+{
+	return year;
+}
+
+double Film::get_rate()
+{
+	return rate;
+}
+
+int Film::get_length()
+{
+	return length;
+}
+
+std::string Film::get_name()
+{
+	return name;
+}
+
+std::string Film::get_director()
+{
+	return director;
+}

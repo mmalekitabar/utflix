@@ -12,6 +12,12 @@ public:
 	Film(int _id, std::string _name, int _year, int _length, int _price, std::string _summary, std::string _director, int _publisher_id);
 	void change_information(std::map<std::string, std::string> informations);
 	void sell_out();
+	std::string get_name();
+	std::string get_director();
+	int get_price();
+	int get_year();
+	double get_rate();
+	int get_length();
 	int get_id();
 	int get_pub_id();
 	int is_num(std::string num);
