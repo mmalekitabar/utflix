@@ -8,6 +8,7 @@ User::User(int _id, std::string _email, std::string _username, std::string _pass
 	password = _password;
 	age = _age;
 	publisher = _publisher;
+	money = 0;
 }
 
 std::string User::get_username()

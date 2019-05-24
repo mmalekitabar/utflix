@@ -97,7 +97,9 @@ void Controller::act_on(std::vector<std::string> input)
 		}
 		else if(input[1] == "money")
 		{
-
+			if(!(loggedin->is_publisher()))
+				throw PermissionDenied();
+			loggedin->receive_money();
 		}
 		else if(input[1] == "replies")
 		{
