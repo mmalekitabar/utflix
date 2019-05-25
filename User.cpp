@@ -50,6 +50,16 @@ int User::get_id()
 	return id;
 }
 
+int User::last_rate(int film_id)
+{
+	for(int i = 0; i < purchased_id.size(); i++)
+	{
+		if(purchased_id[i] == film_id)
+			return rate_purchased[i];
+	}
+	throw NotFound();
+}
+
 bool User::is_publisher()
 {
 	return publisher;
@@ -77,7 +87,7 @@ bool User::has_not_bought(std::string film_id)
 	int f_id = num_adjust(film_id);
 	for(int i = 0; i < purchased_id.size(); i++)
 	{
-		if(purchased_id[i] == film_id)
+		if(purchased_id[i] == num_adjust(film_id))
 			return false;
 	}
 	return true;

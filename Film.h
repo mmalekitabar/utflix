@@ -18,11 +18,16 @@ public:
 	int get_price();
 	int get_year();
 	double get_rate();
+	int get_rated_num();
 	int get_length();
 	int get_id();
 	int get_pub_id();
 	int is_num(std::string num);
 	bool sell_status();
+	void set_rate(int _rate);
+	void increase_rated_num();
+	void add_rate(int _rate);
+	void update_rate(int _rate, int last_rate);
 private:
 	int id;
 	std::string name;

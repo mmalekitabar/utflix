@@ -35,7 +35,6 @@ void Controller::act_on(std::vector<std::string> input)
 				films_repository.print_films(informations);
 			else
 				films_repository.print_film(informations["film_id"]);
-			//std::cout << "get films" << std::endl;
 		}
 		else if(input[1] == "purchased")
 		{
@@ -95,7 +94,6 @@ void Controller::act_on(std::vector<std::string> input)
 		}
 		else if(input[1] == "login")
 		{
-			//std::cout << "logging in ...." << std::endl;
 			User* loggingin;
 			for(int i = 4; i < input.size(); i += 2)
 				informations[input[i - 1]] = input[i];
@@ -134,7 +132,6 @@ void Controller::act_on(std::vector<std::string> input)
 		{
 			if(loggedin == NULL)
 				throw PermissionDenied();
-
 		}
 		else if(input[1] == "followers")
 		{
@@ -144,11 +141,9 @@ void Controller::act_on(std::vector<std::string> input)
 				informations[input[i - 1]] = input[i];
 			users_repository.add_follower_to_pub(informations["user_id"], loggedin->get_id());
 			std::cout << "OK" << std::endl;
-
 		}
 		else if(input[1] == "buy")
 		{
-			//std::cout << "Buying ..." << std::endl;
 			if(loggedin == NULL)
 				throw PermissionDenied();
 			for(int i = 4; i < input.size(); i += 2)
@@ -158,13 +153,15 @@ void Controller::act_on(std::vector<std::string> input)
 		}
 		else if(input[1] == "rate")
 		{
-			std::cout << "post rate" << std::endl;
 			if(loggedin == NULL)
 				throw PermissionDenied();
+			for(int i = 4; i < input.size(); i += 2)
+				informations[input[i - 1]] = input[i];
 			if(loggedin->has_not_bought(informations["film_id"]))
 				throw PermissionDenied();
-			films_repository.rate_film(stoi(film_id), loggedin->last_rate(stoi(film_id)));
-
+			films_repository.rate_film(stoi(informations["film_id"]), informations["score"], 
+				loggedin->last_rate(stoi(informations["film_id"])));
+			std::cout << "OK" << std::endl;
 		}
 		else if(input[1] == "comments")
 		{

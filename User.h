@@ -16,6 +16,7 @@ public:
 	void add_money(std::string amount);
 	void buy_film(int film_price, int film_id);
 	int num_adjust(std::string num);
+	int last_rate(int film_id);
 	std::vector<int> get_purchased();
 	virtual std::vector<int> get_followers(){};
 	virtual void add_follower(int follower_id){};

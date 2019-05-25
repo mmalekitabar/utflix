@@ -37,6 +37,21 @@ void Film::sell_out()
 	sold_out = true;
 }
 
+void Film::set_rate(int _rate)
+{
+	rate = _rate;
+}
+
+void Film::increase_rated_num()
+{
+	rated_num++;
+}
+
+int Film::get_rated_num()
+{
+	return rated_num;
+}
+
 int Film::get_id()
 {
 	return id;
@@ -95,4 +110,15 @@ std::string Film::get_director()
 std::string Film::get_summary()
 {
 	return summary;
+}
+
+void Film::add_rate(int _rate)
+{
+	rate = (rate*rated_num +_rate)/(double)(rated_num + 1);
+	rated_num++;
+}
+
+void Film::update_rate(int _rate, int last_rate)
+{
+	rate = (rate*rated_num - last_rate +_rate)/(double)(rated_num);
 }

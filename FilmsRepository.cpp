@@ -120,17 +120,32 @@ void FilmsRepository::print_film(std::string film_id)
 	throw NotFound();
 }
 
-void FilmsRepository::rate_film(int film_id, int last_rate)
+void FilmsRepository::rate_film(int film_id, std::string s_rate, int last_rate)
 {
 	for(int i = 0; i < films.size(); i++)
 	{
 		if(films[i]->get_id() == film_id)
 		{
-
+			if(films[i]->get_rated_num() == 0)
+			{
+				films[i]->set_rate(num_adjust(s_rate));
+				films[i]->increase_rated_num();
+			}
+			else
+			{
+				if(last_rate == -1)
+				{
+					films[i]->add_rate(num_adjust(s_rate));
+				}
+				else
+				{
+					films[i]->update_rate(num_adjust(s_rate), last_rate);
+				}
+			}
 			return;
 		}
 	}
-	
+
 }
 
 int FilmsRepository::find_film_pub(std::string film_id)
