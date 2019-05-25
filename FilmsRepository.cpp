@@ -2,7 +2,7 @@
 
 FilmsRepository::FilmsRepository()
 {
-	last_id = 0;
+	last_id = 1;
 }
 
 int FilmsRepository::add_film(std::map<std::string, std::string> informations, int publisher_id)
@@ -11,8 +11,8 @@ int FilmsRepository::add_film(std::map<std::string, std::string> informations, i
 		, num_adjust(informations["year"]), num_adjust(informations["length"])
 		, num_adjust(informations["price"]), string_adjust(informations["summary"])
 		, string_adjust(informations["director"]), publisher_id));
-	return last_id;
 	last_id++;
+	return last_id - 1;
 }
 
 void FilmsRepository::edit_film(std::map<std::string, std::string> informations)
@@ -42,7 +42,7 @@ void FilmsRepository::delete_film(std::string film_id)
 }
 
 
-void FilmsRepository::print_for_pub(std::map<std::string, std::string> informations, std::vector<int> films_id)
+void FilmsRepository::print_film_by_ids(std::map<std::string, std::string> informations, std::vector<int> films_id)
 {
 	int num_list = 1;
 	std::cout << "#. Film Id | Film Name | Film Length | Film Price | Rate | Production Year | Film Director" << std::endl;
@@ -52,7 +52,8 @@ void FilmsRepository::print_for_pub(std::map<std::string, std::string> informati
 			&& rate_check(informations["min_rate"], films[i]->get_rate()) 
 			&& year_check(informations["min_year"], informations["max_year"], films[i]->get_year()) 
 			&& price_check(informations["price"], films[i]->get_price()) 
-			&& director_check(informations["name"], films[i]->get_director()))
+			&& director_check(informations["name"], films[i]->get_director())
+			&& films[i]->sell_status())
 		{
 			for(int j = 0; j < films_id.size(); j++)
 			{
@@ -70,6 +71,68 @@ void FilmsRepository::print_for_pub(std::map<std::string, std::string> informati
 	}
 }
 
+
+void FilmsRepository::print_films(std::map<std::string, std::string> informations)
+{
+	int num_list = 1;
+	std::cout << "#. Film Id | Film Name | Film Length | Film Price | Rate | Production Year | Film Director" << std::endl;
+	for(int i = 0; i < films.size(); i++)
+	{
+		if(name_check(informations["name"], films[i]->get_name()) 
+			&& rate_check(informations["min_rate"], films[i]->get_rate()) 
+			&& year_check(informations["min_year"], informations["max_year"], films[i]->get_year()) 
+			&& price_check(informations["price"], films[i]->get_price()) 
+			&& director_check(informations["name"], films[i]->get_director())
+			&& films[i]->sell_status())
+		{
+					std::cout << num_list << ". " << films[i]->get_id() << " | " 
+						<< films[i]->get_name() << " | " << films[i]->get_length() << " | " 
+						<< films[i]->get_price() << " | " << films[i]->get_rate() << " | " 
+						<< films[i]->get_year() << " | " << films[i]->get_director() << std::endl;
+					num_list++;
+		}
+	}
+}
+
+
+void FilmsRepository::print_film(std::string film_id)
+{
+	int f_id = num_adjust(film_id);
+	for(int i = 0; i < films.size(); i++)
+	{
+		if(films[i]->get_id() == f_id && films[i]->sell_status())
+		{
+			std::cout << "Details of Film " << films[i]->get_name() << std::endl
+				<< "Id = " << films[i]->get_id() << std::endl
+				<< "Director = " << films[i]->get_director() << std::endl
+				<< "Length = " << films[i]->get_length() << std::endl
+				<< "Year = " << films[i]->get_year() << std::endl
+				<< "Summary = " << films[i]->get_summary() << std::endl
+				<< "Rate = " << films[i]->get_rate() << std::endl
+				<< "Price = " << films[i]->get_price() << std::endl << std::endl
+				<< "Comments" << std::endl;
+			//comment printer;
+			std::cout << std::endl << "Recommendation Film" << std::endl;
+			//recomendation printer;
+			return;
+		}
+	}
+	throw NotFound();
+}
+
+void FilmsRepository::rate_film(int film_id, int last_rate)
+{
+	for(int i = 0; i < films.size(); i++)
+	{
+		if(films[i]->get_id() == film_id)
+		{
+
+			return;
+		}
+	}
+	
+}
+
 int FilmsRepository::find_film_pub(std::string film_id)
 {
 	int f_id = num_adjust(film_id);
@@ -77,6 +140,17 @@ int FilmsRepository::find_film_pub(std::string film_id)
 	{
 		if(f_id == films[i]->get_id() && films[i]->sell_status())
 			return films[i]->get_pub_id();
+	}
+	throw NotFound();
+}
+
+int FilmsRepository::find_film_price(std::string film_id)
+{
+	int f_id = num_adjust(film_id);
+	for(int i = 0; i < films.size(); i++)
+	{
+		if(f_id == films[i]->get_id() && films[i]->sell_status())
+			return films[i]->get_price();
 	}
 	throw NotFound();
 }

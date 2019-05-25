@@ -11,6 +11,7 @@ Film::Film(int _id, std::string _name, int _year, int _length, int _price, std::
 	summary = _summary;
 	director = _director;
 	rate = 0;
+	rated_num = 0;
 	publisher_id = _publisher_id;
 	sold_out = false;
 }
@@ -89,4 +90,9 @@ std::string Film::get_name()
 std::string Film::get_director()
 {
 	return director;
+}
+
+std::string Film::get_summary()
+{
+	return summary;
 }

@@ -35,7 +35,7 @@ void StreamingService::check_input(std::string input)
 	std::string part2 = input.substr(0, input.find('?') - 1);
 	if(part1 == "GET")
 	{
-		if(part2 != "followers" && part2 != "films" && part2 != "purchased" && part2 != "notifications" && part2 != "notifications read")
+		if(part2 != "followers" && part2 != "published" && part2 != "films" && part2 != "purchased" && part2 != "notifications" && part2 != "notifications read")
 		{
 			throw NotFound();
 		}
@@ -61,6 +61,7 @@ void StreamingService::check_input(std::string input)
 			throw NotFound();
 		}
 	}
+	else if(part1.size() == 0){}
 	else
 	{
 		throw BadRequest();
@@ -69,6 +70,8 @@ void StreamingService::check_input(std::string input)
 
 void StreamingService::act_on_input(std::string input)
 {
+	if((input.substr(0, input.find(' '))).size() == 0)
+		return;
 	std::vector<std::string> temp;
 	for(int i = 0; input.size() > 0; i++)
 	{

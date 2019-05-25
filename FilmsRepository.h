@@ -16,8 +16,12 @@ public:
 	int add_film(std::map<std::string, std::string> informations, int publisher_id);
 	void edit_film(std::map<std::string, std::string> informations);
 	void delete_film(std::string film_id);
-	void print_for_pub(std::map<std::string, std::string> informations, std::vector<int> films_id);
+	void print_film_by_ids(std::map<std::string, std::string> informations, std::vector<int> films_id);
+	void print_films(std::map<std::string, std::string> informations);
+	void print_film(std::string film_id);
+	void rate_film(int film_id, int last_rate);
 	int find_film_pub(std::string film_id);
+	int find_film_price(std::string film_id);
 	int id_generator();
 	int num_adjust(std::string num);
 	std::string string_adjust(std::string str);

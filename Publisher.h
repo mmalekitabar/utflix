@@ -9,6 +9,7 @@ class Publisher : public User
 public:
 	Publisher(int _id, std::string _email, std::string _username, std::string _password, int _age, bool _publisher);
 	virtual std::vector<int> get_followers();
+	virtual void add_follower(int follower_id);
 	virtual std::vector<int> get_films();
 	virtual void submit_film(int film_id);
 	virtual void receive_money();

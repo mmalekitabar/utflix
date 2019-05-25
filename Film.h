@@ -14,6 +14,7 @@ public:
 	void sell_out();
 	std::string get_name();
 	std::string get_director();
+	std::string get_summary();
 	int get_price();
 	int get_year();
 	double get_rate();
@@ -31,6 +32,7 @@ private:
 	std::string summary;
 	std::string director;
 	double rate;
+	int rated_num;
 	int publisher_id;
 	bool sold_out;
 };

@@ -8,6 +8,11 @@ std::vector<int> Publisher::get_followers()
 	return followers_id;
 }
 
+void Publisher::add_follower(int follower_id)
+{
+	followers_id.push_back(follower_id);
+}
+
 void Publisher::receive_money()
 {
 	money += unreceived_money;

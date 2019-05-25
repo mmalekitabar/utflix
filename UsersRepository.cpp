@@ -2,7 +2,7 @@
 
 UsersRepository::UsersRepository()
 {
-	last_id = 0;
+	last_id = 1;
 }
 
 User* UsersRepository::add_user(std::map<std::string, std::string>  informations)
@@ -11,13 +11,15 @@ User* UsersRepository::add_user(std::map<std::string, std::string>  informations
 	{
 		users.push_back(new Publisher(id_generator(), email_adjust(informations["email"]), username_adjust(informations["username"]), password_adjust(informations["password"]), age_adjust(informations["age"]), true));
 		last_id++;
-		return users[last_id - 1];
+		//std::cout << "now we have " << users.size() << " users"<< std::endl;
+		return users[last_id - 2];
 	}
 	else
 	{
 		users.push_back(new User(id_generator(), email_adjust(informations["email"]), username_adjust(informations["username"]), password_adjust(informations["password"]), age_adjust(informations["age"]), false));
 		last_id++;
-		return users[last_id - 1];
+		//std::cout << "now we have " << users.size() << " users"<< std::endl;
+		return users[last_id - 2];
 	}
 }
 
@@ -27,17 +29,22 @@ User* UsersRepository::login_check(std::map<std::string, std::string> informatio
 		throw BadRequest();
 	for(int i = 0; i < users.size(); i++)
 	{
+		//std::cout << "is " << users[i]->get_username() << " like " << informations["username"] << "?" << std::endl;
 		if(users[i]->get_username() == informations["username"])
-			if(users[i]->get_password() == informations["password"])
+		{
+			if(users[i]->get_password() == informations["password"]){
+				//std::cout << "checking pass ..." << std::endl;
 				return users[i];
+			}
 			throw BadRequest(); 
+		}
 	}
 	throw NotFound();
 }
 
 void UsersRepository::print_by_ids(std::vector<int> ids)
 {
-	std::cout << "#. User Id | User Username | User Email" << std::endl;
+	std::cout << "List of Followers" << std::endl << "#. User Id | User Username | User Email" << std::endl;
 	int list_num = 1;
 	for(int i = 0; i < users.size(); i++)
 	{
@@ -49,6 +56,33 @@ void UsersRepository::print_by_ids(std::vector<int> ids)
 				list_num++;
 				break;
 			}
+		}
+	}
+}
+
+void UsersRepository::add_follower_to_pub(std::string pub_id, int follower_id)
+{
+	if(pub_id.size() == 0)
+		throw BadRequest();
+	for(int i = 0; i < pub_id.size(); i++)
+	{
+		if(pub_id[i] > 57 || pub_id[i] < 48)
+			throw BadRequest();
+	}
+	for(int i = 0; i < users.size(); i++)
+	{
+		if(users[i]->get_id() == stoi(pub_id))
+		{
+			if(!(users[i]->is_publisher()))
+				throw BadRequest();
+			for(int j = 0; j < (users[i]->get_followers()).size(); j++)
+			{
+				if((users[i]->get_followers())[j] == follower_id)
+				{
+					return;
+				}
+			}
+			users[i]->add_follower(follower_id);
 		}
 	}
 }
