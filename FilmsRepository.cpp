@@ -148,6 +148,17 @@ void FilmsRepository::rate_film(int film_id, std::string s_rate, int last_rate)
 
 }
 
+void FilmsRepository::comment_film(int film_id, std::string content)
+{
+	for(int i = 0; i < films.size(); i++)
+	{
+		if(films[i]->get_id() == film_id)
+		{
+			films[i]->add_comment(content);
+		}
+	}
+}
+
 int FilmsRepository::find_film_pub(std::string film_id)
 {
 	int f_id = num_adjust(film_id);

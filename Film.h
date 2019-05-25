@@ -4,6 +4,8 @@
 #include <iostream>
 #include <string>
 #include <map>
+#include <vector>
+#include "Comment.h"
 #include "Exceptions.h"
 
 class Film
@@ -28,6 +30,7 @@ public:
 	void increase_rated_num();
 	void add_rate(int _rate);
 	void update_rate(int _rate, int last_rate);
+	void add_comment(std::string content);
 private:
 	int id;
 	std::string name;
@@ -40,6 +43,8 @@ private:
 	int rated_num;
 	int publisher_id;
 	bool sold_out;
+	std::vector<Comment*> comments;
+	int last_comment_id;
 };
 
 #endif

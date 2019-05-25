@@ -20,6 +20,7 @@ public:
 	void print_films(std::map<std::string, std::string> informations);
 	void print_film(std::string film_id);
 	void rate_film(int film_id, std::string s_rate, int last_rate);
+	void comment_film(int film_id, std::string content);
 	int find_film_pub(std::string film_id);
 	int find_film_price(std::string film_id);
 	int id_generator();

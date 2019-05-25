@@ -167,7 +167,12 @@ void Controller::act_on(std::vector<std::string> input)
 		{
 			if(loggedin == NULL)
 				throw PermissionDenied();
-			std::cout << "post comments" << std::endl;
+			for(int i = 4; i < input.size(); i += 2)
+				informations[input[i - 1]] = input[i];
+			if(loggedin->has_not_bought(informations["film_id"]))
+				throw PermissionDenied();
+			films_repository.comment_film(stoi(informations["film_id"]), informations["content"]);
+			std::cout << "OK" << std::endl;
 		}
 	}
 }

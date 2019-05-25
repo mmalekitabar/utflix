@@ -14,6 +14,7 @@ Film::Film(int _id, std::string _name, int _year, int _length, int _price, std::
 	rated_num = 0;
 	publisher_id = _publisher_id;
 	sold_out = false;
+	last_comment_id = 1;
 }
 
 void Film::change_information(std::map<std::string, std::string> informations)
@@ -121,4 +122,10 @@ void Film::add_rate(int _rate)
 void Film::update_rate(int _rate, int last_rate)
 {
 	rate = (rate*rated_num - last_rate +_rate)/(double)(rated_num);
+}
+
+void Film::add_comment(std::string content)
+{
+	comments.push_back(new Comment(last_comment_id, content));
+	last_comment_id++;
 }

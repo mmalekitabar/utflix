@@ -8,9 +8,10 @@
 class Comment
 {
 public:
-	Comment(std::string _text);
+	Comment(int _id, std::string _text);
 
 private:
+	int id;
 	std::string text;
 	std::string reply;
 };
