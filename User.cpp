@@ -11,18 +11,19 @@ User::User(int _id, std::string _email, std::string _username, std::string _pass
 	money = 0;
 }
 
-void User::buy_film(int film_price, int film_id)
+int User::buy_film(int film_price, int film_id)
 {
 	if(film_price > money)
 		throw PermissionDenied();
 	for(int i = 0; i < purchased_id.size(); i++)
 	{
 		if(purchased_id[i] == film_id)
-			return;
+			return 0;
 	}
 	money -= film_price;
 	purchased_id.push_back(film_id);
 	rate_purchased.push_back(-1);
+	return 1;
 }
 
 std::string User::get_username()

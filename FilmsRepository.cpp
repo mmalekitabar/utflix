@@ -249,6 +249,17 @@ int FilmsRepository::find_film_price(std::string film_id)
 	throw NotFound();
 }
 
+double FilmsRepository::find_film_rate(std::string film_id)
+{
+	int f_id = num_adjust(film_id);
+	for(int i = 0; i < films.size(); i++)
+	{
+		if(f_id == films[i]->get_id() && films[i]->sell_status())
+			return films[i]->get_rate();
+	}
+	throw NotFound();
+}
+
 int FilmsRepository::id_generator()
 {
 	return last_id;

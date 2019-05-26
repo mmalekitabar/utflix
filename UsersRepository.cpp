@@ -88,6 +88,23 @@ void UsersRepository::add_follower_to_pub(std::string pub_id, int follower_id)
 }
 
 
+void UsersRepository::add_system_debt(int pub_id, int whole_money, double rate)
+{
+	for(int i = 0; i < users.size(); i++)
+	{
+		if(users[i]->get_id() == pub_id)
+		{
+			if(rate >= 8)
+				users[i]->add_bank(whole_money * 0.95);
+			else if(rate >= 5)
+				users[i]->add_bank(whole_money * 0.9);
+			else
+				users[i]->add_bank(whole_money * 0.8);
+			return;
+		}
+	}
+}
+
 int UsersRepository::id_generator()
 {
 	return last_id;

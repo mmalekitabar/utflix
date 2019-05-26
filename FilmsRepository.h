@@ -26,6 +26,7 @@ public:
 	void recommendation_print(int film_id, std::vector<int> purchased_id);
 	int find_film_pub(std::string film_id);
 	int find_film_price(std::string film_id);
+	double find_film_rate(std::string film_id);
 	int id_generator();
 	int num_adjust(std::string num);
 	std::string string_adjust(std::string str);

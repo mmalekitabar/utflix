@@ -28,3 +28,8 @@ void Publisher::submit_film(int film_id)
 {
 	films_id.push_back(film_id);
 }
+
+void Publisher::add_bank(int amount)
+{
+	unreceived_money += amount;
+}

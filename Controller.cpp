@@ -159,11 +159,15 @@ void Controller::act_on(std::vector<std::string> input)
 		}
 		else if(input[1] == "buy")
 		{
+			int money_trans;
 			if(loggedin == NULL)
 				throw PermissionDenied();
 			for(int i = 4; i < input.size(); i += 2)
 				informations[input[i - 1]] = input[i];
-			loggedin->buy_film(films_repository.find_film_price(informations["film_id"]), stoi(informations["film_id"]));
+			money_trans = loggedin->buy_film(films_repository.find_film_price(informations["film_id"]), stoi(informations["film_id"]));
+			users_repository.add_system_debt(films_repository.find_film_pub(informations["film_id"])
+				, films_repository.find_film_price(informations["film_id"]) * money_trans
+				, films_repository.find_film_rate(informations["film_id"]));
 			std::cout << "OK" << std::endl;
 		}
 		else if(input[1] == "rate")
@@ -195,5 +199,4 @@ void Controller::act_on(std::vector<std::string> input)
 
 
 
-
-///after buy money to pub
+////notifications
