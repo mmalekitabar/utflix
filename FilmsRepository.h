@@ -1,13 +1,11 @@
 #ifndef FILMSREPOSITORY_H
 #define FILMSREPOSITORY_H
 
-#include "Film.h"
 #include <vector>
 #include <map>
-#include "Exceptions.h"
 #include <string>
-
-//class std::exception;
+#include "Exceptions.h"
+#include "Film.h"
 
 class FilmsRepository
 {

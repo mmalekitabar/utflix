@@ -11,7 +11,8 @@
 class Film
 {
 public:
-	Film(int _id, std::string _name, int _year, int _length, int _price, std::string _summary, std::string _director, int _publisher_id);
+	Film(int _id, std::string _name, int _year, int _length, int _price
+		, std::string _summary, std::string _director, int _publisher_id);
 	void change_information(std::map<std::string, std::string> informations);
 	void sell_out();
 	std::string get_name();

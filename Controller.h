@@ -24,5 +24,4 @@ private:
 	User* loggedin;
 };
 
-
 #endif

@@ -20,5 +20,4 @@ private:
 	Controller controller;
 };
 
-
 #endif

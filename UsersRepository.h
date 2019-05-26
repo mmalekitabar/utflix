@@ -1,13 +1,12 @@
 #ifndef USERSREPOSITORY_H
 #define USERSREPOSITORY_H
 
-#include "User.h"
-#include "Publisher.h"
 #include <map>
 #include <vector>
 #include <iostream>
-//#include "Exceptions.h"
 #include <regex>
+#include "User.h"
+#include "Publisher.h"
 
 class exception;
 

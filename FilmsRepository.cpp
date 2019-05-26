@@ -41,11 +41,11 @@ void FilmsRepository::delete_film(std::string film_id)
 	}
 }
 
-
 void FilmsRepository::print_film_by_ids(std::map<std::string, std::string> informations, std::vector<int> films_id)
 {
 	int num_list = 1;
-	std::cout << "#. Film Id | Film Name | Film Length | Film Price | Rate | Production Year | Film Director" << std::endl;
+	std::cout << "#. Film Id | Film Name | Film Length | Film Price | Rate | Production Year | Film Director" 
+		<< std::endl;
 	for(int i = 0; i < films.size(); i++)
 	{
 		if(name_check(informations["name"], films[i]->get_name()) 
@@ -71,11 +71,11 @@ void FilmsRepository::print_film_by_ids(std::map<std::string, std::string> infor
 	}
 }
 
-
 void FilmsRepository::print_films(std::map<std::string, std::string> informations)
 {
 	int num_list = 1;
-	std::cout << "#. Film Id | Film Name | Film Length | Film Price | Rate | Production Year | Film Director" << std::endl;
+	std::cout << "#. Film Id | Film Name | Film Length | Film Price | Rate | Production Year | Film Director" 
+		<< std::endl;
 	for(int i = 0; i < films.size(); i++)
 	{
 		if(name_check(informations["name"], films[i]->get_name()) 
@@ -93,7 +93,6 @@ void FilmsRepository::print_films(std::map<std::string, std::string> information
 		}
 	}
 }
-
 
 void FilmsRepository::print_film(std::string film_id, std::vector<int> purchased_id)
 {
@@ -308,6 +307,7 @@ bool FilmsRepository::name_check(std::string s_name, std::string name)
 	}
 	return false;
 }
+
 bool FilmsRepository::rate_check(std::string s_rate, double rate)
 {
 	if(s_rate.size() == 0)
@@ -321,6 +321,7 @@ bool FilmsRepository::rate_check(std::string s_rate, double rate)
 		return true;
 	return false;
 }
+
 bool FilmsRepository::year_check(std::string min_year, std::string max_year, int year)
 {
 	if(min_year.size() == 0 && max_year.size() == 0)
@@ -347,6 +348,7 @@ bool FilmsRepository::year_check(std::string min_year, std::string max_year, int
 	return false;
 
 }
+
 bool FilmsRepository::price_check(std::string s_price, int price)
 {
 	if(s_price.size() == 0)
@@ -360,6 +362,7 @@ bool FilmsRepository::price_check(std::string s_price, int price)
 		return true;
 	return false;
 }
+
 bool FilmsRepository::director_check(std::string s_director, std::string director)
 {
 	if(s_director.size() == 0)

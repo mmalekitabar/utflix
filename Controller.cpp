@@ -158,7 +158,8 @@ void Controller::act_on(std::vector<std::string> input)
 				informations[input[i - 1]] = input[i];
 			if(loggedin->get_id() != films_repository.find_film_pub(informations["film_id"]))
 				throw PermissionDenied();
-			int commenter_id = films_repository.reply_to_comment(stoi(informations["film_id"]), informations["comment_id"], informations["content"]);
+			int commenter_id = films_repository.reply_to_comment(stoi(informations["film_id"])
+				, informations["comment_id"], informations["content"]);
 			std::cout << "OK" << std::endl;
 			notif = "Publisher ";
 			notif += loggedin->get_username();
@@ -189,7 +190,8 @@ void Controller::act_on(std::vector<std::string> input)
 				throw PermissionDenied();
 			for(int i = 4; i < input.size(); i += 2)
 				informations[input[i - 1]] = input[i];
-			money_trans = loggedin->buy_film(films_repository.find_film_price(informations["film_id"]), stoi(informations["film_id"]));
+			money_trans = loggedin->buy_film(films_repository.find_film_price(informations["film_id"])
+				, stoi(informations["film_id"]));
 			users_repository.add_system_debt(films_repository.find_film_pub(informations["film_id"])
 				, films_repository.find_film_price(informations["film_id"]) * money_trans
 				, films_repository.find_film_rate(informations["film_id"]));

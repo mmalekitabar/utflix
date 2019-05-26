@@ -1,6 +1,7 @@
 #include "Publisher.h"
 
-Publisher::Publisher(int _id, std::string _email, std::string _username, std::string _password, int _age, bool _publisher):
+Publisher::Publisher(int _id, std::string _email, std::string _username
+	, std::string _password, int _age, bool _publisher):
 User(_id, _email, _username, _password, _age, _publisher){}
 
 std::vector<int> Publisher::get_followers()

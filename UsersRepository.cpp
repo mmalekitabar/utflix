@@ -9,16 +9,18 @@ User* UsersRepository::add_user(std::map<std::string, std::string>  informations
 {
 	if(informations["publisher"] == "true")
 	{
-		users.push_back(new Publisher(id_generator(), email_adjust(informations["email"]), username_adjust(informations["username"]), password_adjust(informations["password"]), age_adjust(informations["age"]), true));
+		users.push_back(new Publisher(id_generator(), email_adjust(informations["email"])
+			, username_adjust(informations["username"]), password_adjust(informations["password"])
+			, age_adjust(informations["age"]), true));
 		last_id++;
-		//std::cout << "now we have " << users.size() << " users"<< std::endl;
 		return users[last_id - 2];
 	}
 	else
 	{
-		users.push_back(new User(id_generator(), email_adjust(informations["email"]), username_adjust(informations["username"]), password_adjust(informations["password"]), age_adjust(informations["age"]), false));
+		users.push_back(new User(id_generator(), email_adjust(informations["email"])
+			, username_adjust(informations["username"]), password_adjust(informations["password"])
+			, age_adjust(informations["age"]), false));
 		last_id++;
-		//std::cout << "now we have " << users.size() << " users"<< std::endl;
 		return users[last_id - 2];
 	}
 }
@@ -29,11 +31,9 @@ User* UsersRepository::login_check(std::map<std::string, std::string> informatio
 		throw BadRequest();
 	for(int i = 0; i < users.size(); i++)
 	{
-		//std::cout << "is " << users[i]->get_username() << " like " << informations["username"] << "?" << std::endl;
 		if(users[i]->get_username() == informations["username"])
 		{
 			if(users[i]->get_password() == informations["password"]){
-				//std::cout << "checking pass ..." << std::endl;
 				return users[i];
 			}
 			throw BadRequest(); 
@@ -44,7 +44,8 @@ User* UsersRepository::login_check(std::map<std::string, std::string> informatio
 
 void UsersRepository::print_by_ids(std::vector<int> ids)
 {
-	std::cout << "List of Followers" << std::endl << "#. User Id | User Username | User Email" << std::endl;
+	std::cout << "List of Followers" << std::endl 
+		<< "#. User Id | User Username | User Email" << std::endl;
 	int list_num = 1;
 	for(int i = 0; i < users.size(); i++)
 	{
@@ -52,7 +53,8 @@ void UsersRepository::print_by_ids(std::vector<int> ids)
 		{
 			if(users[i]->get_id() == ids[j])
 			{
-				std::cout << list_num << ". " << users[i]->get_id() << " | " << users[i]->get_username() << " | " << users[i]->get_email() << std::endl;
+				std::cout << list_num << ". " << users[i]->get_id() << " | " 
+					<< users[i]->get_username() << " | " << users[i]->get_email() << std::endl;
 				list_num++;
 				break;
 			}

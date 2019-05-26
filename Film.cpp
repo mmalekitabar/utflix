@@ -1,7 +1,8 @@
 #include "Film.h"
 
 
-Film::Film(int _id, std::string _name, int _year, int _length, int _price, std::string _summary, std::string _director, int _publisher_id)
+Film::Film(int _id, std::string _name, int _year, int _length, int _price
+	, std::string _summary, std::string _director, int _publisher_id)
 {
 	id = _id;
 	name = _name;
