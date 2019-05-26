@@ -1,5 +1,20 @@
 #include "Film.h"
 
+#define DOT "."
+#define DOT_S ". "
+#define YEAR "year"
+#define LENGTH "length"
+#define NAME "name"
+#define SUMMARY "summary"
+#define DIRECTOR "director"
+#define EMPTY 0
+#define ZERO 0
+#define NUM_START 48
+#define NUM_END 57
+#define YES 1
+#define NO 0
+#define START 0
+#define ONE 1
 
 Film::Film(int _id, std::string _name, int _year, int _length, int _price
 	, std::string _summary, std::string _director, int _publisher_id)
@@ -11,27 +26,27 @@ Film::Film(int _id, std::string _name, int _year, int _length, int _price
 	price = _price;
 	summary = _summary;
 	director = _director;
-	rate = 0;
-	rated_num = 0;
+	rate = ZERO;
+	rated_num = ZERO;
 	publisher_id = _publisher_id;
 	sold_out = false;
-	last_comment_id = 1;
+	last_comment_id = ONE;
 }
 
 void Film::change_information(std::map<std::string, std::string> informations)
 {
-	if(!is_num(informations["year"]) || !is_num(informations["length"]))
+	if(!is_num(informations[YEAR]) || !is_num(informations[LENGTH]))
 		throw BadRequest();
-	if(informations["name"].size() > 0)
-		name = informations["name"];
-	if(informations["year"].size() > 0)
-		year = stoi(informations["year"]);
-	if(informations["length"].size() > 0)
-		length = stoi(informations["length"]);
-	if(informations["summary"].size() > 0)
-		summary = informations["summary"];
-	if(informations["director"].size() > 0)
-		director = informations["director"];
+	if(informations[NAME].size() > EMPTY)
+		name = informations[NAME];
+	if(informations[YEAR].size() > EMPTY)
+		year = stoi(informations[YEAR]);
+	if(informations[LENGTH].size() > EMPTY)
+		length = stoi(informations[LENGTH]);
+	if(informations[SUMMARY].size() > EMPTY)
+		summary = informations[SUMMARY];
+	if(informations[DIRECTOR].size() > EMPTY)
+		director = informations[DIRECTOR];
 }
 
 void Film::sell_out()
@@ -66,12 +81,12 @@ int Film::get_pub_id()
 
 int Film::is_num(std::string num)
 {
-	for(int i = 0; i < num.size(); i++)
+	for(int i = START; i < num.size(); i++)
 	{
-		if(num[i] > 57 || num[i] < 48)
-			return 0;
+		if(num[i] > NUM_END || num[i] < NUM_START)
+			return NO;
 	}
-	return 1;
+	return YES;
 }
 
 bool Film::sell_status()
@@ -116,7 +131,7 @@ std::string Film::get_summary()
 
 void Film::add_rate(int _rate)
 {
-	rate = (rate*rated_num +_rate)/(double)(rated_num + 1);
+	rate = (rate*rated_num +_rate)/(double)(rated_num + ONE);
 	rated_num++;
 }
 
@@ -133,7 +148,7 @@ void Film::add_comment(std::string content, int commenter)
 
 int Film::add_reply(int comment_id, std::string content)
 {
-	for(int i = 0; i < comments.size(); i++)
+	for(int i = START; i < comments.size(); i++)
 	{
 		if(comments[i]->get_id() == comment_id)
 		{
@@ -145,7 +160,7 @@ int Film::add_reply(int comment_id, std::string content)
 
 void Film::erase_comment(int comment_id)
 {
-	for(int i = 0; i < comments.size(); i++)
+	for(int i = START; i < comments.size(); i++)
 	{
 		if(comments[i]->get_id() == comment_id)
 		{
@@ -158,14 +173,14 @@ void Film::erase_comment(int comment_id)
 
 void Film::print_comments()
 {
-	int comment_num = 1;
-	for(int i = 0; i < comments.size(); i++)
+	int comment_num = ONE;
+	for(int i = START; i < comments.size(); i++)
 	{
-		std::cout << comments[i]->get_id() << ". " << comments[i]->get_content() << std::endl;
+		std::cout << comments[i]->get_id() << DOT_S << comments[i]->get_content() << std::endl;
 		std::vector<std::string> replies = comments[i]->get_replies();
-		for(int j = 0; j < replies.size(); j++)
+		for(int j = START; j < replies.size(); j++)
 		{
-			std::cout << comments[i]->get_id() << "." << j + 1 << ". " << replies[j] << std::endl;
+			std::cout << comments[i]->get_id() << DOT << j + ONE << DOT_S << replies[j] << std::endl;
 		}
 	}
 }

@@ -3,19 +3,23 @@
 
 #include <exception>
 
+#define NOT_FOUND "Not Found"
+#define BAD_REQUEST "Bad Request"
+#define PERMISSION_DENIED "Permission Denied"
+
 class NotFound : public std::exception
 {
-	virtual const char* what() const throw(){return "Not Found";}
+	virtual const char* what() const throw(){return NOT_FOUND;}
 };
 
 class BadRequest : public std::exception
 {
-	virtual const char* what() const throw(){return "Bad Request";}
+	virtual const char* what() const throw(){return BAD_REQUEST;}
 };
 
 class PermissionDenied : public std::exception
 {
-	virtual const char* what() const throw(){return "Permission Denied";}
+	virtual const char* what() const throw(){return PERMISSION_DENIED;}
 };
 
 #endif

@@ -15,7 +15,6 @@ public:
 	std::string get_input();
 	void check_input(std::string input);
 	void act_on_input(std::string input);
-
 private:
 	Controller controller;
 };

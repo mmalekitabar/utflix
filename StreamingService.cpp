@@ -1,5 +1,11 @@
 #include "StreamingService.h"
 
+#define ONE 1
+#define START 0
+#define EMPTY 0
+#define SEPERATOR '?'
+#define SPACE ' '
+
 StreamingService::StreamingService():
 controller(){}
 
@@ -30,9 +36,9 @@ std::string StreamingService::get_input()
 
 void StreamingService::check_input(std::string input)
 {
-	std::string part1 = input.substr(0, input.find(' '));
-	input.erase(0, input.find(' ') + 1);
-	std::string part2 = input.substr(0, input.find('?') - 1);
+	std::string part1 = input.substr(START, input.find(SPACE));
+	input.erase(START, input.find(SPACE) + ONE);
+	std::string part2 = input.substr(START, input.find(SEPERATOR) - ONE);
 	if(part1 == "GET")
 	{
 		if(part2 != "followers" && part2 != "published" 
@@ -65,7 +71,7 @@ void StreamingService::check_input(std::string input)
 			throw NotFound();
 		}
 	}
-	else if(part1.size() == 0)
+	else if(part1.size() == EMPTY)
 	{
 		return;
 	}
@@ -77,15 +83,15 @@ void StreamingService::check_input(std::string input)
 
 void StreamingService::act_on_input(std::string input)
 {
-	if((input.substr(0, input.find(' '))).size() == 0)
+	if((input.substr(START, input.find(SPACE))).size() == EMPTY)
 		return;
 	std::vector<std::string> temp;
-	for(int i = 0; input.size() > 0; i++)
+	for(int i = START; input.size() > EMPTY; i++)
 	{
-		std::string part = input.substr(0, input.find(' '));
-		if(part.size() > 0)
+		std::string part = input.substr(START, input.find(SPACE));
+		if(part.size() > EMPTY)
 			temp.push_back(part);
-		input.erase(0, temp[i].size() + 1);
+		input.erase(START, temp[i].size() + ONE);
 	}
 	controller.act_on(temp);
 }

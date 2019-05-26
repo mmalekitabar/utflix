@@ -1,5 +1,50 @@
 #include "Controller.h"
 
+#define FIRST_PART 0
+#define SECOND_PART 1
+#define START 4
+#define S_START 5
+#define NEXT 2
+#define PREV 1
+#define EMPTY 0
+#define UNREAD_SIZE 2
+#define READ_SIZE 3
+#define O_START 0
+#define GET "GET"
+#define FOLLOWERS "followers"
+#define PUBLISHED "published"
+#define FILMS "films"
+#define FILM_ID "film_id"
+#define PURCHASED "purchased"
+#define LIMIT "limit"
+#define NOTIFICATIONS "notifications"
+#define PUT "PUT"
+#define DELETE "DELETE"
+#define OK "OK"
+#define COMMENTS "comments"
+#define COMMENT_ID "comment_id"
+#define POST "POST"
+#define SIGNUP "signup"
+#define LOGIN "login"
+#define PUBLISHER "Publisher "
+#define ID " with id "
+#define REGISTER_FILM " register new film."
+#define MONEY "money"
+#define AMOUNT "amount"
+#define CONTENT "content"
+#define REPLIES "replies"
+#define REPLY_COMMENT " reply to your comment."
+#define USER "User "
+#define USER_ID "user_id"
+#define FOLLOW " follow you."
+#define BUY "buy"
+#define BUY_FILM " buy your film "
+#define DOT "."
+#define RATE_FILM " rate your film "
+#define COMMENT_FILM " comment on your film "
+#define RATE "rate"
+#define SCORE "score"
+
 Controller::Controller():
 users_repository(), comments_repository(), films_repository()
 {
@@ -10,245 +55,245 @@ void Controller::act_on(std::vector<std::string> input)
 {
 	std::string notif;
 	std::map<std::string, std::string> informations;
-	if(input[0] == "GET")
+	if(input[FIRST_PART] == GET)
 	{
 		if(loggedin == NULL)
 				throw PermissionDenied();
-		if(input[1] == "followers")
+		if(input[SECOND_PART] == FOLLOWERS)
 		{
 			if(!(loggedin->is_publisher()))
 				throw PermissionDenied();
 			users_repository.print_by_ids(loggedin->get_followers());
 		}
-		else if(input[1] == "published")
+		else if(input[SECOND_PART] == PUBLISHED)
 		{
 			if(!(loggedin->is_publisher()))
 				throw PermissionDenied();
-			for(int i = 4; i < input.size(); i += 2)
-				informations[input[i - 1]] = input[i];
+			for(int i = START; i < input.size(); i += NEXT)
+				informations[input[i - PREV]] = input[i];
 			films_repository.print_film_by_ids(informations, loggedin->get_films());
 		}
-		else if(input[1] == "films")
+		else if(input[SECOND_PART] == FILMS)
 		{
-			for(int i = 4; i < input.size(); i += 2)
-				informations[input[i - 1]] = input[i];
-			if(informations["film_id"].size() == 0)
+			for(int i = START; i < input.size(); i += NEXT)
+				informations[input[i - PREV]] = input[i];
+			if(informations[FILM_ID].size() == EMPTY)
 				films_repository.print_films(informations);
 			else
-				films_repository.print_film(informations["film_id"], loggedin->get_purchased());
+				films_repository.print_film(informations[FILM_ID], loggedin->get_purchased());
 		}
-		else if(input[1] == "purchased")
+		else if(input[SECOND_PART] == PURCHASED)
 		{
-			for(int i = 4; i < input.size(); i += 2)
-				informations[input[i - 1]] = input[i];
+			for(int i = START; i < input.size(); i += NEXT)
+				informations[input[i - PREV]] = input[i];
 			films_repository.print_film_by_ids(informations, loggedin->get_purchased());
 		}
-		else if(input[1] == "notifications" && input.size() == 2)
+		else if(input[SECOND_PART] == NOTIFICATIONS && input.size() == UNREAD_SIZE)
 		{
 			loggedin->show_notifs();
 		}
-		else if(input[1] == "notifications" && input.size() > 2)
+		else if(input[SECOND_PART] == NOTIFICATIONS && input.size() >= READ_SIZE)
 		{
-			for(int i = 5; i < input.size(); i += 2)
-				informations[input[i - 1]] = input[i];
-			loggedin->show_read_notifs(informations["limit"]);
+			for(int i = S_START; i < input.size(); i += NEXT)
+				informations[input[i - PREV]] = input[i];
+			loggedin->show_read_notifs(informations[LIMIT]);
 		}
 	}
-	else if(input[0] == "PUT")
+	else if(input[FIRST_PART] == PUT)
 	{
 		if(loggedin == NULL)
 				throw PermissionDenied();
-		if(input[1] == "films")
+		if(input[SECOND_PART] == FILMS)
 		{
-			for(int i = 4; i < input.size(); i += 2)
-				informations[input[i - 1]] = input[i];
-			if(loggedin->get_id() != films_repository.find_film_pub(informations["film_id"]))
+			for(int i = START; i < input.size(); i += NEXT)
+				informations[input[i - PREV]] = input[i];
+			if(loggedin->get_id() != films_repository.find_film_pub(informations[FILM_ID]))
 				throw PermissionDenied();
 			films_repository.edit_film(informations);
-			std::cout << "OK" << std::endl;
+			std::cout << OK << std::endl;
 		}
 	}
-	else if(input[0] == "DELETE")
+	else if(input[FIRST_PART] == DELETE)
 	{
 		if(loggedin == NULL)
 				throw PermissionDenied();
-		if(input[1] == "films")
+		if(input[SECOND_PART] == FILMS)
 		{
-			for(int i = 4; i < input.size(); i += 2)
-				informations[input[i - 1]] = input[i];
-			if(loggedin->get_id() != films_repository.find_film_pub(informations["film_id"]))
+			for(int i = START; i < input.size(); i += NEXT)
+				informations[input[i - PREV]] = input[i];
+			if(loggedin->get_id() != films_repository.find_film_pub(informations[FILM_ID]))
 				throw PermissionDenied();
-			films_repository.delete_film(informations["film_id"]);
-			std::cout << "OK" << std::endl;
+			films_repository.delete_film(informations[FILM_ID]);
+			std::cout << OK << std::endl;
 		}
-		else if(input[1] == "comments")
+		else if(input[SECOND_PART] == COMMENTS)
 		{
 			if(!(loggedin->is_publisher()))
 				throw PermissionDenied();
-			for(int i = 4; i < input.size(); i += 2)
-				informations[input[i - 1]] = input[i];
-			if(loggedin->get_id() != films_repository.find_film_pub(informations["film_id"]))
+			for(int i = START; i < input.size(); i += NEXT)
+				informations[input[i - PREV]] = input[i];
+			if(loggedin->get_id() != films_repository.find_film_pub(informations[FILM_ID]))
 				throw PermissionDenied();
-			films_repository.delete_comment(stoi(informations["film_id"]), informations["comment_id"]);
-			std::cout << "OK" << std::endl;
+			films_repository.delete_comment(stoi(informations[FILM_ID]), informations[COMMENT_ID]);
+			std::cout << OK << std::endl;
 		}
 	}
-	else if(input[0] == "POST")
+	else if(input[FIRST_PART] == POST)
 	{
-		if(input[1] == "signup")
+		if(input[SECOND_PART] == SIGNUP)
 		{
-			for(int i = 4; i < input.size(); i += 2)
-				informations[input[i - 1]] = input[i];
+			for(int i = START; i < input.size(); i += NEXT)
+				informations[input[i - PREV]] = input[i];
 			loggedin = users_repository.add_user(informations);
-			std::cout << "OK" << std::endl;
+			std::cout << OK << std::endl;
 		}
-		else if(input[1] == "login")
+		else if(input[SECOND_PART] == LOGIN)
 		{
 			User* loggingin;
-			for(int i = 4; i < input.size(); i += 2)
-				informations[input[i - 1]] = input[i];
+			for(int i = START; i < input.size(); i += NEXT)
+				informations[input[i - PREV]] = input[i];
 			loggingin = users_repository.login_check(informations);
 			if(loggingin != NULL)
 				loggedin = loggingin;
-			std::cout << "OK" << std::endl;
+			std::cout << OK << std::endl;
 		}
-		else if(input[1] == "films")
+		else if(input[SECOND_PART] == FILMS)
 		{
 			if(loggedin == NULL)
 				throw PermissionDenied();
 			if(!loggedin->is_publisher())
 				throw PermissionDenied();
-			for(int i = 4; i < input.size(); i += 2)
-				informations[input[i - 1]] = input[i];
+			for(int i = START; i < input.size(); i += NEXT)
+				informations[input[i - PREV]] = input[i];
 			int unsubmitted_film = films_repository.add_film(informations, loggedin->get_id());
 			loggedin->submit_film(unsubmitted_film);
-			std::cout << "OK" << std::endl;
-			notif = "Publisher ";
+			std::cout << OK << std::endl;
+			notif = PUBLISHER;
 			notif += loggedin->get_username();
-			notif += " with id ";
+			notif += ID;
 			notif += std::to_string(loggedin->get_id());
-			notif += " register new film.";
+			notif += REGISTER_FILM;
 			std::vector<int> followers = loggedin->get_followers();
-			for (int i = 0; i < followers.size(); ++i)
+			for (int i = O_START; i < followers.size(); ++i)
 			{
 				users_repository.notif_to_user(followers[i], notif);
 			}
 		}
-		else if(input[1] == "money")
+		else if(input[SECOND_PART] == MONEY)
 		{
 			if(loggedin == NULL)
 				throw PermissionDenied();
-			for(int i = 4; i < input.size(); i += 2)
-				informations[input[i - 1]] = input[i];
-			if(!(loggedin->is_publisher()) && informations["amount"].size() == 0)
+			for(int i = START; i < input.size(); i += NEXT)
+				informations[input[i - PREV]] = input[i];
+			if(!(loggedin->is_publisher()) && informations[AMOUNT].size() == EMPTY)
 				throw PermissionDenied();
-			else if(informations["amount"].size() > 0)
-				loggedin->add_money(informations["amount"]);
+			else if(informations[AMOUNT].size() > EMPTY)
+				loggedin->add_money(informations[AMOUNT]);
 			else
 				loggedin->receive_money();
-			std::cout << "OK" << std::endl;
+			std::cout << OK << std::endl;
 		}
-		else if(input[1] == "replies")
+		else if(input[SECOND_PART] == REPLIES)
 		{
 			if(loggedin == NULL)
 				throw PermissionDenied();
 			if(!(loggedin->is_publisher()))
 				throw PermissionDenied();
-			for(int i = 4; i < input.size(); i += 2)
-				informations[input[i - 1]] = input[i];
-			if(loggedin->get_id() != films_repository.find_film_pub(informations["film_id"]))
+			for(int i = START; i < input.size(); i += NEXT)
+				informations[input[i - PREV]] = input[i];
+			if(loggedin->get_id() != films_repository.find_film_pub(informations[FILM_ID]))
 				throw PermissionDenied();
-			int commenter_id = films_repository.reply_to_comment(stoi(informations["film_id"])
-				, informations["comment_id"], informations["content"]);
-			std::cout << "OK" << std::endl;
-			notif = "Publisher ";
+			int commenter_id = films_repository.reply_to_comment(stoi(informations[FILM_ID])
+				, informations[COMMENT_ID], informations[CONTENT]);
+			std::cout << OK << std::endl;
+			notif = PUBLISHER;
 			notif += loggedin->get_username();
-			notif += " with id ";
+			notif += ID;
 			notif += std::to_string(loggedin->get_id());
-			notif += " reply to your comment.";
+			notif += REPLY_COMMENT;
 			users_repository.notif_to_user(commenter_id, notif);
 		}
-		else if(input[1] == "followers")
+		else if(input[SECOND_PART] == FOLLOWERS)
 		{
 			if(loggedin == NULL)
 				throw PermissionDenied();
-			for(int i = 4; i < input.size(); i += 2)
-				informations[input[i - 1]] = input[i];
-			users_repository.add_follower_to_pub(informations["user_id"], loggedin->get_id());
-			std::cout << "OK" << std::endl;
-			notif = "User ";
+			for(int i = START; i < input.size(); i += NEXT)
+				informations[input[i - PREV]] = input[i];
+			users_repository.add_follower_to_pub(informations[USER_ID], loggedin->get_id());
+			std::cout << OK << std::endl;
+			notif = USER;
 			notif += loggedin->get_username();
-			notif += " with id ";
+			notif += ID;
 			notif += std::to_string(loggedin->get_id());
-			notif += " follow you.";
-			users_repository.notif_to_user(stoi(informations["user_id"]), notif);
+			notif += FOLLOW;
+			users_repository.notif_to_user(stoi(informations[USER_ID]), notif);
 		}
-		else if(input[1] == "buy")
+		else if(input[SECOND_PART] == BUY)
 		{
 			int money_trans;
 			if(loggedin == NULL)
 				throw PermissionDenied();
-			for(int i = 4; i < input.size(); i += 2)
-				informations[input[i - 1]] = input[i];
-			money_trans = loggedin->buy_film(films_repository.find_film_price(informations["film_id"])
-				, stoi(informations["film_id"]));
-			users_repository.add_system_debt(films_repository.find_film_pub(informations["film_id"])
-				, films_repository.find_film_price(informations["film_id"]) * money_trans
-				, films_repository.find_film_rate(informations["film_id"]));
-			std::cout << "OK" << std::endl;
-			notif = "User ";
+			for(int i = START; i < input.size(); i += NEXT)
+				informations[input[i - PREV]] = input[i];
+			money_trans = loggedin->buy_film(films_repository.find_film_price(informations[FILM_ID])
+				, stoi(informations[FILM_ID]));
+			users_repository.add_system_debt(films_repository.find_film_pub(informations[FILM_ID])
+				, films_repository.find_film_price(informations[FILM_ID]) * money_trans
+				, films_repository.find_film_rate(informations[FILM_ID]));
+			std::cout << OK << std::endl;
+			notif = USER;
 			notif += loggedin->get_username();
-			notif += " with id ";
+			notif += ID;
 			notif += std::to_string(loggedin->get_id());
-			notif += " buy your film ";
-			notif += films_repository.find_film_name(informations["film_id"]);
-			notif += " with id ";
-			notif += informations["film_id"];
-			notif += ".";
-			users_repository.notif_to_user(films_repository.find_film_pub(informations["film_id"]), notif);
+			notif += BUY_FILM;
+			notif += films_repository.find_film_name(informations[FILM_ID]);
+			notif += ID;
+			notif += informations[FILM_ID];
+			notif += DOT;
+			users_repository.notif_to_user(films_repository.find_film_pub(informations[FILM_ID]), notif);
 		}
-		else if(input[1] == "rate")
+		else if(input[SECOND_PART] == RATE)
 		{
 			if(loggedin == NULL)
 				throw PermissionDenied();
-			for(int i = 4; i < input.size(); i += 2)
-				informations[input[i - 1]] = input[i];
-			if(loggedin->has_not_bought(informations["film_id"]))
+			for(int i = START; i < input.size(); i += NEXT)
+				informations[input[i - PREV]] = input[i];
+			if(loggedin->has_not_bought(informations[FILM_ID]))
 				throw PermissionDenied();
-			films_repository.rate_film(stoi(informations["film_id"]), informations["score"], 
-				loggedin->last_rate(stoi(informations["film_id"])));
-			std::cout << "OK" << std::endl;
-			notif = "User ";
+			films_repository.rate_film(stoi(informations[FILM_ID]), informations[SCORE], 
+				loggedin->last_rate(stoi(informations[FILM_ID])));
+			std::cout << OK << std::endl;
+			notif = USER;
 			notif += loggedin->get_username();
-			notif += " with id ";
+			notif += ID;
 			notif += std::to_string(loggedin->get_id());
-			notif += " rate your film ";
-			notif += films_repository.find_film_name(informations["film_id"]);
-			notif += " with id ";
-			notif += informations["film_id"];
-			notif += ".";
-			users_repository.notif_to_user(films_repository.find_film_pub(informations["film_id"]), notif);
+			notif += RATE_FILM;
+			notif += films_repository.find_film_name(informations[FILM_ID]);
+			notif += ID;
+			notif += informations[FILM_ID];
+			notif += DOT;
+			users_repository.notif_to_user(films_repository.find_film_pub(informations[FILM_ID]), notif);
 		}
-		else if(input[1] == "comments")
+		else if(input[SECOND_PART] == COMMENTS)
 		{
 			if(loggedin == NULL)
 				throw PermissionDenied();
-			for(int i = 4; i < input.size(); i += 2)
-				informations[input[i - 1]] = input[i];
-			if(loggedin->has_not_bought(informations["film_id"]))
+			for(int i = START; i < input.size(); i += NEXT)
+				informations[input[i - PREV]] = input[i];
+			if(loggedin->has_not_bought(informations[FILM_ID]))
 				throw PermissionDenied();
-			films_repository.comment_film(stoi(informations["film_id"]), informations["content"], loggedin->get_id());
-			std::cout << "OK" << std::endl;
-			notif = "User ";
+			films_repository.comment_film(stoi(informations[FILM_ID]), informations[CONTENT], loggedin->get_id());
+			std::cout << OK << std::endl;
+			notif = USER;
 			notif += loggedin->get_username();
-			notif += " with id ";
+			notif += ID;
 			notif += std::to_string(loggedin->get_id());
-			notif += " comment on your film ";
-			notif += films_repository.find_film_name(informations["film_id"]);
-			notif += " with id ";
-			notif += informations["film_id"];
-			notif += ".";
-			users_repository.notif_to_user(films_repository.find_film_pub(informations["film_id"]), notif);
+			notif += COMMENT_FILM;
+			notif += films_repository.find_film_name(informations[FILM_ID]);
+			notif += ID;
+			notif += informations[FILM_ID];
+			notif += DOT;
+			users_repository.notif_to_user(films_repository.find_film_pub(informations[FILM_ID]), notif);
 		}
 	}
 }
