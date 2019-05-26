@@ -31,6 +31,9 @@ public:
 	void add_rate(int _rate);
 	void update_rate(int _rate, int last_rate);
 	void add_comment(std::string content);
+	void add_reply(int comment_id, std::string content);
+	void erase_comment(int comment_id);
+	void print_comments();
 private:
 	int id;
 	std::string name;

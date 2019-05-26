@@ -95,7 +95,7 @@ void FilmsRepository::print_films(std::map<std::string, std::string> information
 }
 
 
-void FilmsRepository::print_film(std::string film_id)
+void FilmsRepository::print_film(std::string film_id, std::vector<int> purchased_id)
 {
 	int f_id = num_adjust(film_id);
 	for(int i = 0; i < films.size(); i++)
@@ -111,13 +111,59 @@ void FilmsRepository::print_film(std::string film_id)
 				<< "Rate = " << films[i]->get_rate() << std::endl
 				<< "Price = " << films[i]->get_price() << std::endl << std::endl
 				<< "Comments" << std::endl;
-			//comment printer;
+			films[i]->print_comments();
 			std::cout << std::endl << "Recommendation Film" << std::endl;
-			//recomendation printer;
+			recommendation_print(films[i]->get_id(), purchased_id);
 			return;
 		}
 	}
 	throw NotFound();
+}
+
+void FilmsRepository::recommendation_print(int film_id, std::vector<int> purchased_id)
+{
+	std::cout << "#. Film Id | Film Name | Film Length | Film Director" << std::endl;
+	int checked = 0;
+	std::vector<double> rates;
+	for(int i = 0; i < films.size(); i++)
+	{
+		for(int j = 0; j < purchased_id.size(); j++)
+		{
+			if(films[i]->get_id() == purchased_id[j])
+			{
+				rates.push_back(-1);
+				checked = 1;
+				break;
+			}
+		}
+		if((films[i]->get_id() == film_id || !films[i]->sell_status()) && checked == 0)
+			rates.push_back(-1);
+		else if(checked == 0)
+		{
+			rates.push_back(films[i]->get_rate());
+		}
+		checked = 0;
+	}
+	for(int n = 0; n < 4; n++)
+	{
+		int recommend_num = 1, max_num = -1;
+		double max = -1;
+		for(int i = 0; i < films.size(); i++)
+		{
+			if(max < films[i]->get_rate() && rates[i] != -1)
+			{
+				max = films[i]->get_rate();
+				max_num = i;
+			}
+		}
+		if(max != -1)
+		{
+		rates[max_num] = -1;
+		std::cout << recommend_num << ". " << films[max_num]->get_id() << " | " 
+			<< films[max_num]->get_name() << " | " << films[max_num]->get_length() 
+			<< " | " << films[max_num]->get_director() << std::endl;
+		}
+	}
 }
 
 void FilmsRepository::rate_film(int film_id, std::string s_rate, int last_rate)
@@ -155,6 +201,28 @@ void FilmsRepository::comment_film(int film_id, std::string content)
 		if(films[i]->get_id() == film_id)
 		{
 			films[i]->add_comment(content);
+		}
+	}
+}
+
+void FilmsRepository::reply_to_comment(int film_id, std::string comment_id, std::string content)
+{
+	for(int i = 0; i < films.size(); i++)
+	{
+		if(films[i]->get_id() == film_id)
+		{
+			films[i]->add_reply(num_adjust(comment_id), content);
+		}
+	}
+}
+
+void FilmsRepository::delete_comment(int film_id, std::string comment_id)
+{
+	for(int i = 0; i < films.size(); i++)
+	{
+		if(films[i]->get_id() == film_id)
+		{
+			films[i]->erase_comment(num_adjust(comment_id));
 		}
 	}
 }

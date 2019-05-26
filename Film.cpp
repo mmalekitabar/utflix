@@ -121,11 +121,51 @@ void Film::add_rate(int _rate)
 
 void Film::update_rate(int _rate, int last_rate)
 {
-	rate = (rate*rated_num - last_rate +_rate)/(double)(rated_num);
+	rate = (rate*rated_num - last_rate +_rate)/((double)rated_num);
 }
 
 void Film::add_comment(std::string content)
 {
 	comments.push_back(new Comment(last_comment_id, content));
 	last_comment_id++;
+}
+
+void Film::add_reply(int comment_id, std::string content)
+{
+	for(int i = 0; i < comments.size(); i++)
+	{
+		if(comments[i]->get_id() == comment_id)
+		{
+			comments[i]->set_reply(content);
+			return;
+		}
+	}
+	throw NotFound();
+}
+
+void Film::erase_comment(int comment_id)
+{
+	for(int i = 0; i < comments.size(); i++)
+	{
+		if(comments[i]->get_id() == comment_id)
+		{
+			comments.erase(comments.begin() + i);
+			return;
+		}
+	}
+	throw NotFound();
+}
+
+void Film::print_comments()
+{
+	int comment_num = 1;
+	for(int i = 0; i < comments.size(); i++)
+	{
+		std::cout << comments[i]->get_id() << ". " << comments[i]->get_content() << std::endl;
+		std::vector<std::string> replies = comments[i]->get_replies();
+		for(int j = 0; j < replies.size(); j++)
+		{
+			std::cout << comments[i]->get_id() << "." << j + 1 << ". " << replies[j] << std::endl;
+		}
+	}
 }
