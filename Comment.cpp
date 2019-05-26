@@ -1,14 +1,16 @@
 #include "Comment.h"
 
-Comment::Comment(int _id, std::string _text)
+Comment::Comment(int _id, std::string _text, int commenter)
 {
 	id = _id;
+	commenter_id = commenter;
 	text = _text;
 }
 
-void Comment::set_reply(std::string content)
+int Comment::set_reply(std::string content)
 {
 	reply.push_back(content);
+	return commenter_id;
 }
 
 int Comment::get_id()

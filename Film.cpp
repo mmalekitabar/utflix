@@ -124,20 +124,19 @@ void Film::update_rate(int _rate, int last_rate)
 	rate = (rate*rated_num - last_rate +_rate)/((double)rated_num);
 }
 
-void Film::add_comment(std::string content)
+void Film::add_comment(std::string content, int commenter)
 {
-	comments.push_back(new Comment(last_comment_id, content));
+	comments.push_back(new Comment(last_comment_id, content, commenter));
 	last_comment_id++;
 }
 
-void Film::add_reply(int comment_id, std::string content)
+int Film::add_reply(int comment_id, std::string content)
 {
 	for(int i = 0; i < comments.size(); i++)
 	{
 		if(comments[i]->get_id() == comment_id)
 		{
-			comments[i]->set_reply(content);
-			return;
+			return comments[i]->set_reply(content);
 		}
 	}
 	throw NotFound();

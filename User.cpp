@@ -93,3 +93,32 @@ bool User::has_not_bought(std::string film_id)
 	}
 	return true;
 }
+
+void User::add_notif(std::string notif)
+{
+	notifications.insert(notifications.begin(), notif);
+}
+
+void User::show_notifs()
+{
+	std::cout << "Notification Message" << std::endl;
+	for (int i = 0; i < notifications.size(); i++)
+	{
+		std::cout << i + 1 << ". " << notifications[i] << std::endl;
+	}
+	for (int i = 0; i < notifications.size(); i++)
+	{
+		read_notifications.insert(read_notifications.begin(), notifications[i]);
+	}
+	notifications.clear();
+}
+
+void User::show_read_notifs(std::string limit)
+{
+	int lim = num_adjust(limit);
+	std::cout << "Notification Message" << std::endl;
+	for (int i = 0; i < lim; i++)
+	{
+		std::cout << i + 1 << ". " << read_notifications[i] << std::endl;
+	}
+}

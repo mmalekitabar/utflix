@@ -194,24 +194,24 @@ void FilmsRepository::rate_film(int film_id, std::string s_rate, int last_rate)
 
 }
 
-void FilmsRepository::comment_film(int film_id, std::string content)
+void FilmsRepository::comment_film(int film_id, std::string content, int commenter_id)
 {
 	for(int i = 0; i < films.size(); i++)
 	{
 		if(films[i]->get_id() == film_id)
 		{
-			films[i]->add_comment(content);
+			films[i]->add_comment(content, commenter_id);
 		}
 	}
 }
 
-void FilmsRepository::reply_to_comment(int film_id, std::string comment_id, std::string content)
+int FilmsRepository::reply_to_comment(int film_id, std::string comment_id, std::string content)
 {
 	for(int i = 0; i < films.size(); i++)
 	{
 		if(films[i]->get_id() == film_id)
 		{
-			films[i]->add_reply(num_adjust(comment_id), content);
+			return films[i]->add_reply(num_adjust(comment_id), content);
 		}
 	}
 }
@@ -256,6 +256,17 @@ double FilmsRepository::find_film_rate(std::string film_id)
 	{
 		if(f_id == films[i]->get_id() && films[i]->sell_status())
 			return films[i]->get_rate();
+	}
+	throw NotFound();
+}
+
+std::string FilmsRepository::find_film_name(std::string film_id)
+{
+	int f_id = num_adjust(film_id);
+	for(int i = 0; i < films.size(); i++)
+	{
+		if(f_id == films[i]->get_id() && films[i]->sell_status())
+			return films[i]->get_name();
 	}
 	throw NotFound();
 }

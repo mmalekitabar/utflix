@@ -20,6 +20,7 @@ public:
 	void print_by_ids(std::vector<int> ids);
 	void add_follower_to_pub(std::string pub_id, int follower_id);
 	void add_system_debt(int pub_id, int whole_money, double rate);
+	void notif_to_user(int user_id, std::string notif);
 	int id_generator();
 	std::string email_adjust(std::string _email);
 	std::string username_adjust(std::string _username);

@@ -105,6 +105,17 @@ void UsersRepository::add_system_debt(int pub_id, int whole_money, double rate)
 	}
 }
 
+void UsersRepository::notif_to_user(int user_id, std::string notif)
+{
+	for(int i = 0; i < users.size(); i++)
+	{
+		if(users[i]->get_id() == user_id)
+		{
+			users[i]->add_notif(notif);
+		}
+	}
+}
+
 int UsersRepository::id_generator()
 {
 	return last_id;

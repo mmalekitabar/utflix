@@ -8,6 +8,7 @@ users_repository(), comments_repository(), films_repository()
 
 void Controller::act_on(std::vector<std::string> input)
 {
+	std::string notif;
 	std::map<std::string, std::string> informations;
 	if(input[0] == "GET")
 	{
@@ -44,11 +45,13 @@ void Controller::act_on(std::vector<std::string> input)
 		}
 		else if(input[1] == "notifications" && input.size() == 2)
 		{
-			std::cout << "notifications" << std::endl;
+			loggedin->show_notifs();
 		}
 		else if(input[1] == "notifications" && input.size() > 2)
 		{
-			std::cout << "notifications read" << std::endl;
+			for(int i = 5; i < input.size(); i += 2)
+				informations[input[i - 1]] = input[i];
+			loggedin->show_read_notifs(informations["limit"]);
 		}
 	}
 	else if(input[0] == "PUT")
@@ -120,6 +123,16 @@ void Controller::act_on(std::vector<std::string> input)
 			int unsubmitted_film = films_repository.add_film(informations, loggedin->get_id());
 			loggedin->submit_film(unsubmitted_film);
 			std::cout << "OK" << std::endl;
+			notif = "Publisher ";
+			notif += loggedin->get_username();
+			notif += " with id ";
+			notif += std::to_string(loggedin->get_id());
+			notif += " register new film.";
+			std::vector<int> followers = loggedin->get_followers();
+			for (int i = 0; i < followers.size(); ++i)
+			{
+				users_repository.notif_to_user(followers[i], notif);
+			}
 		}
 		else if(input[1] == "money")
 		{
@@ -145,8 +158,14 @@ void Controller::act_on(std::vector<std::string> input)
 				informations[input[i - 1]] = input[i];
 			if(loggedin->get_id() != films_repository.find_film_pub(informations["film_id"]))
 				throw PermissionDenied();
-			films_repository.reply_to_comment(stoi(informations["film_id"]), informations["comment_id"], informations["content"]);
+			int commenter_id = films_repository.reply_to_comment(stoi(informations["film_id"]), informations["comment_id"], informations["content"]);
 			std::cout << "OK" << std::endl;
+			notif = "Publisher ";
+			notif += loggedin->get_username();
+			notif += " with id ";
+			notif += std::to_string(loggedin->get_id());
+			notif += " reply to your comment.";
+			users_repository.notif_to_user(commenter_id, notif);
 		}
 		else if(input[1] == "followers")
 		{
@@ -156,6 +175,12 @@ void Controller::act_on(std::vector<std::string> input)
 				informations[input[i - 1]] = input[i];
 			users_repository.add_follower_to_pub(informations["user_id"], loggedin->get_id());
 			std::cout << "OK" << std::endl;
+			notif = "User ";
+			notif += loggedin->get_username();
+			notif += " with id ";
+			notif += std::to_string(loggedin->get_id());
+			notif += " follow you.";
+			users_repository.notif_to_user(stoi(informations["user_id"]), notif);
 		}
 		else if(input[1] == "buy")
 		{
@@ -169,6 +194,16 @@ void Controller::act_on(std::vector<std::string> input)
 				, films_repository.find_film_price(informations["film_id"]) * money_trans
 				, films_repository.find_film_rate(informations["film_id"]));
 			std::cout << "OK" << std::endl;
+			notif = "User ";
+			notif += loggedin->get_username();
+			notif += " with id ";
+			notif += std::to_string(loggedin->get_id());
+			notif += " buy your film ";
+			notif += films_repository.find_film_name(informations["film_id"]);
+			notif += " with id ";
+			notif += informations["film_id"];
+			notif += ".";
+			users_repository.notif_to_user(films_repository.find_film_pub(informations["film_id"]), notif);
 		}
 		else if(input[1] == "rate")
 		{
@@ -181,6 +216,16 @@ void Controller::act_on(std::vector<std::string> input)
 			films_repository.rate_film(stoi(informations["film_id"]), informations["score"], 
 				loggedin->last_rate(stoi(informations["film_id"])));
 			std::cout << "OK" << std::endl;
+			notif = "User ";
+			notif += loggedin->get_username();
+			notif += " with id ";
+			notif += std::to_string(loggedin->get_id());
+			notif += " rate your film ";
+			notif += films_repository.find_film_name(informations["film_id"]);
+			notif += " with id ";
+			notif += informations["film_id"];
+			notif += ".";
+			users_repository.notif_to_user(films_repository.find_film_pub(informations["film_id"]), notif);
 		}
 		else if(input[1] == "comments")
 		{
@@ -190,13 +235,18 @@ void Controller::act_on(std::vector<std::string> input)
 				informations[input[i - 1]] = input[i];
 			if(loggedin->has_not_bought(informations["film_id"]))
 				throw PermissionDenied();
-			films_repository.comment_film(stoi(informations["film_id"]), informations["content"]);
+			films_repository.comment_film(stoi(informations["film_id"]), informations["content"], loggedin->get_id());
 			std::cout << "OK" << std::endl;
+			notif = "User ";
+			notif += loggedin->get_username();
+			notif += " with id ";
+			notif += std::to_string(loggedin->get_id());
+			notif += " comment on your film ";
+			notif += films_repository.find_film_name(informations["film_id"]);
+			notif += " with id ";
+			notif += informations["film_id"];
+			notif += ".";
+			users_repository.notif_to_user(films_repository.find_film_pub(informations["film_id"]), notif);
 		}
 	}
 }
-
-
-
-
-////notifications
