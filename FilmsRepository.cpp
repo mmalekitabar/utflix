@@ -40,8 +40,19 @@ int FilmsRepository::add_film(std::map<std::string, std::string> informations, i
 		, num_adjust(informations[YEAR]), num_adjust(informations[LENGTH])
 		, num_adjust(informations[PRICE]), string_adjust(informations[SUMMARY])
 		, string_adjust(informations[DIRECTOR]), publisher_id));
+	recom_table_expand(last_id);
 	last_id++;
 	return last_id - ONE;
+}
+
+void FilmsRepository::recom_table_expand(int curr_id)
+{
+	for (int i = 0; i < recom_table.size(); ++i)
+	{
+		recom_table[i].push_back(0);
+	}
+	std::vector<int> temp (recom_table.size() + 1, 0);
+	recom_table.push_back(temp);
 }
 
 void FilmsRepository::edit_film(std::map<std::string, std::string> informations)
@@ -150,45 +161,46 @@ void FilmsRepository::recommendation_print(int film_id, std::vector<int> purchas
 {
 	std::cout << RECOM_HEADER << std::endl;
 	int checked = NOT_CHECKED;
-	std::vector<double> rates;
+	std::vector<int> mutal_seens;
 	for(int i = START; i < films.size(); i++)
 	{
 		for(int j = START; j < purchased_id.size(); j++)
 		{
 			if(films[i]->get_id() == purchased_id[j])
 			{
-				rates.push_back(NOT_ALLOWED);
+				mutal_seens.push_back(NOT_ALLOWED);
 				checked = CHECKED;
 				break;
 			}
 		}
 		if((films[i]->get_id() == film_id || !films[i]->sell_status()) && checked == NOT_CHECKED)
-			rates.push_back(NOT_ALLOWED);
+			mutal_seens.push_back(NOT_ALLOWED);
 		else if(checked == NOT_CHECKED)
 		{
-			rates.push_back(films[i]->get_rate());
+			mutal_seens.push_back(recom_table[film_id - 1][i]);
 		}
 		checked = NOT_CHECKED;
 	}
 	for(int n = START; n < FOUR_TIMES; n++)
 	{
 		int recommend_num = ONE, max_num = START;
-		double max = NOT_EXISTING;
+		int max = NOT_EXISTING;
 		for(int i = START; i < films.size(); i++)
 		{
-			if(max < films[i]->get_rate() && rates[i] != NOT_ALLOWED)
+			if((max < recom_table[film_id - 1][i]) && (mutal_seens[i] != NOT_ALLOWED))
 			{
-				max = films[i]->get_rate();
+				max = recom_table[film_id - 1][i];
 				max_num = i;
 			}
 		}
 		if(max != NOT_EXISTING)
 		{
-		rates[max_num] = NOT_ALLOWED;
-		std::cout << recommend_num << DOT_S << films[max_num]->get_id() << LINE 
+		mutal_seens[max_num] = NOT_ALLOWED;
+		std::cout << n + ONE << DOT_S << films[max_num]->get_id() << LINE 
 			<< films[max_num]->get_name() << LINE << films[max_num]->get_length() 
 			<< LINE << films[max_num]->get_director() << std::endl;
 		}
+		recommend_num++;
 	}
 }
 
@@ -400,4 +412,19 @@ bool FilmsRepository::director_check(std::string s_director, std::string directo
 				return true;
 	}
 	return false;
+}
+
+int FilmsRepository::get_film_num()
+{
+	return (last_id - 1);
+}
+
+void FilmsRepository::update_recom_table(int film_id, std::vector<int> mutals)
+{
+	for (int i = 0; i < films.size(); ++i)
+	{
+		recom_table[film_id - 1][i] = mutals[i];
+		recom_table[i][film_id - 1] = mutals[i];
+	}
+
 }

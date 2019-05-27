@@ -246,6 +246,8 @@ void Controller::act_on(std::vector<std::string> input)
 				users_repository.add_system_debt(films_repository.find_film_pub(informations[FILM_ID])
 					, films_repository.find_film_price(informations[FILM_ID]) * money_trans
 					, films_repository.find_film_rate(informations[FILM_ID]));
+				std::vector<int> mutals = users_repository.get_mutals(stoi(informations[FILM_ID]), films_repository.get_film_num());
+				films_repository.update_recom_table(stoi(informations[FILM_ID]), mutals);
 				std::cout << OK << std::endl;
 				notif = USER;
 				notif += loggedin->get_username();

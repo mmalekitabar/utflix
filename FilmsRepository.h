@@ -12,6 +12,7 @@ class FilmsRepository
 public:
 	FilmsRepository();
 	int add_film(std::map<std::string, std::string> informations, int publisher_id);
+	void recom_table_expand(int curr_id);
 	void edit_film(std::map<std::string, std::string> informations);
 	void delete_film(std::string film_id);
 	void print_film_by_ids(std::map<std::string, std::string> informations, std::vector<int> films_id);
@@ -34,9 +35,12 @@ public:
 	bool year_check(std::string min_year, std::string max_year, int year);
 	bool price_check(std::string s_price, int price);
 	bool director_check(std::string s_director, std::string director);
+	int get_film_num();
+	void update_recom_table(int film_id, std::vector<int> mutals);
 private:
 	int last_id;
 	std::vector<Film*> films;
+	std::vector<std::vector<int>> recom_table;
 };
 
 #endif

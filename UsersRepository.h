@@ -26,6 +26,7 @@ public:
 	std::string username_adjust(std::string _username);
 	std::string password_adjust(std::string _password);
 	int age_adjust(std::string _age);
+	std::vector<int> get_mutals(int film_id, int films_num);
 private:
 	std::vector<User*> users;
 	int last_id;

@@ -169,3 +169,29 @@ int UsersRepository::age_adjust(std::string _age)
 	}
 	return stoi(_age);
 }
+
+std::vector<int> UsersRepository::get_mutals(int film_id, int films_num)
+{
+	std::vector<int> mutals;
+	for (int i = 0; i < films_num; ++i)
+	{
+		mutals.push_back(0);
+	}
+	std::vector<int> user_films;
+	for (int i = 0; i < users.size(); ++i)
+	{
+		user_films = users[i]->get_purchased();
+		for (int j = 0; j < user_films.size(); ++j)
+		{
+			if(user_films[j] == film_id)
+			{
+				for (int k = 0; k < user_films.size(); ++k)
+				{
+					if(k != j)
+						mutals[user_films[k] - 1]++;
+				}
+			}
+		}
+	}
+	return mutals;
+}
