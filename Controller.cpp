@@ -189,7 +189,10 @@ void Controller::act_on(std::vector<std::string> input)
 				else if(informations[AMOUNT].size() > EMPTY)
 					loggedin->add_money(informations[AMOUNT]);
 				else
+				{
+					users_repository.pay_debt_system(loggedin->get_debt());
 					loggedin->receive_money();
+				}
 				std::cout << OK << std::endl;
 			}
 			else if(input[SECOND_PART] == REPLIES)

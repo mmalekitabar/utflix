@@ -36,3 +36,8 @@ void Publisher::add_bank(int amount)
 {
 	unreceived_money += amount;
 }
+
+int Publisher::get_debt()
+{
+	return unreceived_money;
+}

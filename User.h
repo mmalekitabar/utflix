@@ -15,6 +15,7 @@ public:
 	std::string get_password();
 	std::string get_email();
 	void add_money(std::string amount);
+	void recieve_money(int amount);
 	int buy_film(int film_price, int film_id);
 	int num_adjust(std::string num);
 	int last_rate(int film_id);
@@ -25,6 +26,7 @@ public:
 	virtual std::vector<int> get_films(){};
 	virtual void submit_film(int film_id){};
 	virtual void add_bank(int amount){};
+	virtual int get_debt(){};
 	int get_id();
 	bool is_publisher();
 	bool has_not_bought(std::string film_id);

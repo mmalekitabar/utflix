@@ -59,6 +59,11 @@ void User::add_money(std::string amount)
 	money += num_adjust(amount);
 }
 
+void User::recieve_money(int amount)
+{
+	money -= amount;
+}
+
 int User::get_id()
 {
 	return id;

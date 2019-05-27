@@ -14,6 +14,7 @@ public:
 	virtual void submit_film(int film_id);
 	virtual void receive_money();
 	virtual void add_bank(int amount);
+	virtual int get_debt();
 private:
 	std::vector<int> followers_id;
 	std::vector<int> films_id;

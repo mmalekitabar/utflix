@@ -97,6 +97,7 @@ void UsersRepository::add_system_debt(int pub_id, int whole_money, double rate)
 	{
 		if(users[i]->get_id() == pub_id)
 		{
+			users[0]->add_money(std::to_string(whole_money));
 			if(rate >= 8)
 				users[i]->add_bank(whole_money * 0.95);
 			else if(rate >= 5)
@@ -117,6 +118,11 @@ void UsersRepository::notif_to_user(int user_id, std::string notif)
 			users[i]->add_notif(notif);
 		}
 	}
+}
+
+void UsersRepository::pay_debt_system(int debt)
+{
+	users[0]->recieve_money(debt);
 }
 
 int UsersRepository::id_generator()
