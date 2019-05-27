@@ -5,6 +5,7 @@
 #define EMPTY 0
 #define SEPERATOR '?'
 #define SPACE ' '
+#define S_SPACE " "
 
 StreamingService::StreamingService():
 controller(){}
@@ -38,7 +39,11 @@ void StreamingService::check_input(std::string input)
 {
 	std::string part1 = input.substr(START, input.find(SPACE));
 	input.erase(START, input.find(SPACE) + ONE);
-	std::string part2 = input.substr(START, input.find(SEPERATOR) - ONE);
+	std::string part2;
+	if(input.find(SEPERATOR) != std::string::npos)
+		part2 = input.substr(START, input.find(SEPERATOR) - ONE);
+	else
+		part2 = input.substr(START, input.find(SPACE));
 	if(part1 == "GET")
 	{
 		if(part2 != "followers" && part2 != "published" 
@@ -48,25 +53,14 @@ void StreamingService::check_input(std::string input)
 			throw NotFound();
 		}
 	}
-	else if(part1 == "PUT")
-	{
-		if(part2 != "films")
-		{
-			throw NotFound();
-		}
-	}
-	else if(part1 == "DELETE")
-	{
-		if(part2 != "films" && part2 != "comments")
-		{
-			throw NotFound();
-		}
-	}
 	else if(part1 == "POST")
 	{
-		if(part2 != "signup" &&  part2 != "login" && part2 != "films" 
+
+		if(part2 != "signup" && part2 != "login" && part2 != "films" 
 			&& part2 != "money" && part2 != "replies" && part2 != "followers" 
-			&& part2 != "buy" && part2 != "rate" && part2 != "comments")
+			&& part2 != "buy" && part2 != "rate" && part2 != "comments" 
+			&& part2 != "delete_films" && part2 != "delete_comments" 
+			&& part2 != "put_films" && part2 != "logout")
 		{
 			throw NotFound();
 		}
@@ -89,7 +83,7 @@ void StreamingService::act_on_input(std::string input)
 	for(int i = START; input.size() > EMPTY; i++)
 	{
 		std::string part = input.substr(START, input.find(SPACE));
-		if(part.size() > EMPTY)
+		if(part != S_SPACE)
 			temp.push_back(part);
 		input.erase(START, temp[i].size() + ONE);
 	}

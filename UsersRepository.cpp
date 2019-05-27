@@ -2,7 +2,8 @@
 
 UsersRepository::UsersRepository()
 {
-	last_id = 1;
+	last_id = 2;
+	users.push_back(new User(1, "admin@utflix.ir", "admin", "admin", 19, false));
 }
 
 User* UsersRepository::add_user(std::map<std::string, std::string>  informations)
