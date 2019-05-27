@@ -92,6 +92,10 @@ void Controller::act_on(std::vector<std::string> input)
 				informations[input[i - PREV]] = input[i];
 			films_repository.print_film_by_ids(informations, loggedin->get_purchased());
 		}
+		else if(input[SECOND_PART] == MONEY)
+		{
+			std::cout << loggedin->get_money() << std::endl;
+		}
 		else if(input[SECOND_PART] == NOTIFICATIONS && input.size() == UNREAD_SIZE)
 		{
 			loggedin->show_notifs();

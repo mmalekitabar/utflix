@@ -47,7 +47,7 @@ void StreamingService::check_input(std::string input)
 	if(part1 == "GET")
 	{
 		if(part2 != "followers" && part2 != "published" 
-			&& part2 != "films" && part2 != "purchased" 
+			&& part2 != "films" && part2 != "purchased" && part2 != "money"
 			&& part2 != "notifications" && part2 != "notifications read")
 		{
 			throw NotFound();

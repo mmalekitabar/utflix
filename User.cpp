@@ -69,6 +69,10 @@ int User::get_id()
 	return id;
 }
 
+int User::get_money()
+{
+	return money;
+}
 int User::last_rate(int film_id)
 {
 	for(int i = START; i < purchased_id.size(); i++)

@@ -28,6 +28,7 @@ public:
 	virtual void add_bank(int amount){};
 	virtual int get_debt(){};
 	int get_id();
+	int get_money();
 	bool is_publisher();
 	bool has_not_bought(std::string film_id);
 	void add_notif(std::string notif);
