@@ -57,7 +57,7 @@ $(BUILD_DIR)/Comment.o: Comment.cpp Comment.h
 $(BUILD_DIR)/my_server.o: my_server.cpp server/server.hpp utils/utilities.hpp utils/response.hpp utils/request.hpp utils/include.hpp
 	$(CC) $(CF) -c my_server.cpp -o $(BUILD_DIR)/my_server.o
 
-$(BUILD_DIR)/handlers.o: handlers.cpp server/server.hpp utils/utilities.hpp utils/response.hpp utils/request.hpp utils/include.hpp
+$(BUILD_DIR)/handlers.o: handlers.cpp handlers.hpp server/server.hpp utils/utilities.hpp utils/response.hpp utils/request.hpp utils/include.hpp
 	$(CC) $(CF) -c handlers.cpp -o $(BUILD_DIR)/handlers.o
 
 $(BUILD_DIR)/main.o: main.cpp StreamingService.h

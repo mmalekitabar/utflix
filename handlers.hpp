@@ -5,6 +5,8 @@
 #include <cstdlib> // for rand and srand
 #include <ctime>   // for time
 #include <iostream>
+#include <string>
+#include <map>
 
 class RandomNumberHandler : public RequestHandler {
 public:
@@ -28,5 +30,8 @@ public:
 };
 
 class Show_login
+{
+
+};
 
 #endif
