@@ -11,7 +11,7 @@ class StreamingService
 {
 public:
 	StreamingService();
-	void run();
+	void run(int argc, char **argv);
 	std::string get_input();
 	void check_input(std::string input);
 	void act_on_input(std::string input);

@@ -1,7 +1,7 @@
 #include "StreamingService.h"
 
-int main()
+int main(int argc, char **argv)
 {
 	StreamingService utflix;
-	utflix.run();
+	utflix.run(argc, argv);
 }

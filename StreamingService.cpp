@@ -1,4 +1,7 @@
 #include "StreamingService.h"
+#include "my_server.hpp"
+#include "handlers.hpp"
+#include <iostream>
 
 #define ONE 1
 #define START 0
@@ -10,9 +13,33 @@
 StreamingService::StreamingService():
 controller(){}
 
-void StreamingService::run()
+void StreamingService::run(int argc, char **argv)
 {
-	std::string input;
+	try {
+		MyServer server(argc > 1 ? atoi(argv[1]) : 5000);
+		server.setNotFoundErrPage("static/404.html");
+		server.get("/", new ShowPage("static/logincss.html"));
+		server.get("/login", new ShowPage("static/logincss.html"));
+		server.post("/login", new LoginHandler());
+		//server.get("/signup", new ShowPage("static/logincss.html"));
+		//server.post("/signup", new LoginHandler());
+		//server.get("/pub_home", new ShowPage("static/logincss.html"));
+		//server.post("/pub_home", new LoginHandler());
+		//server.get("/film_submit", new ShowPage("static/logincss.html"));
+		//server.post("/film_submit", new LoginHandler());
+		//server.get("/pub_profile", new ShowPage("static/logincss.html"));
+		//server.post("/pub_profile", new LoginHandler());
+		//server.get("/cos_home", new ShowPage("static/logincss.html"));
+		//server.post("/cos_home", new LoginHandler());
+		//server.get("/cos_profile", new ShowPage("static/logincss.html"));
+		//server.post("/cos_profile", new LoginHandler());
+		//server.get("/film_detail", new ShowPage("static/logincss.html"));
+		//server.post("/film_detail", new LoginHandler());
+		server.run();
+  } catch (Server::Exception e) {
+    std::cerr << e.getMessage() << std::endl;
+  }
+	/*std::string input;
 	while(true)
 	{
 		try
@@ -25,7 +52,7 @@ void StreamingService::run()
 		{
 			std::cout << error.what() << std::endl;
 		}
-	}
+	}*/
 }
 
 std::string StreamingService::get_input()
