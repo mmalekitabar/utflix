@@ -7,6 +7,7 @@
 #include <regex>
 #include "User.h"
 #include "Publisher.h"
+#include "./server/server.hpp"
 
 class exception;
 
@@ -14,6 +15,7 @@ class UsersRepository
 {
 public:
 	UsersRepository();
+	static UsersRepository* get_users_rep();
 	User* add_user(std::map<std::string, std::string> informations);
 	User* login_check(std::map<std::string, std::string> informations);
 	void print_by_ids(std::vector<int> ids);
@@ -28,6 +30,7 @@ public:
 	int age_adjust(std::string _age);
 	std::vector<int> get_mutals(int film_id, int films_num);
 private:
+	static UsersRepository* main_repository;
 	std::vector<User*> users;
 	int last_id;
 };

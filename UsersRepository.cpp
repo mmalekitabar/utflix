@@ -1,10 +1,22 @@
 #include "UsersRepository.h"
 
+UsersRepository* UsersRepository::main_repository;
+
 UsersRepository::UsersRepository()
 {
 	last_id = 2;
 	users.push_back(new User(1, "admin@utflix.ir", "admin", "admin", 19, false));
 }
+
+UsersRepository* UsersRepository::get_users_rep()
+{
+	if(!main_repository)
+	{
+		main_repository = new UsersRepository();
+	}
+	return main_repository;
+}
+
 
 User* UsersRepository::add_user(std::map<std::string, std::string>  informations)
 {
@@ -131,22 +143,24 @@ int UsersRepository::id_generator()
 }
 
 std::string UsersRepository::email_adjust(std::string _email)
-{ 
-   const std::regex email_pattern
+{
+	if(_email.size() == 0)
+		throw Server::Exception("Please enter email.");
+	const std::regex email_pattern
    	("(\\w+)(\\.|_)?(\\w*)@(\\w+)(\\.(\\w+))+");
    	if(std::regex_match(_email, email_pattern))
 		return _email;
-	throw BadRequest();
+	throw Server::Exception("The email you entered is not valid, try again.");
 }
 
 std::string UsersRepository::username_adjust(std::string _username)
 {
 	if(_username.size() == 0)
-		throw BadRequest();
+		throw Server::Exception("Please enter username.");
 	for(int i = 0; i < users.size(); i++)
 	{
 		if(users[i]->get_username() == _username)
-			throw BadRequest(); 
+			throw Server::Exception("The username you entered has already taken, try again with another username."); 
 	}
 	return _username;
 }
@@ -154,18 +168,18 @@ std::string UsersRepository::username_adjust(std::string _username)
 std::string UsersRepository::password_adjust(std::string _password)
 {
 	if(_password.size() == 0)
-		throw BadRequest();
+		throw Server::Exception("Please enter password.");
 	return _password;
 }
 
 int UsersRepository::age_adjust(std::string _age)
 {
 	if(_age.size() == 0)
-		throw BadRequest();
+		throw Server::Exception("Please enter your age.");
 	for(int i = 0; i < _age.size(); i++)
 	{
 		if(_age[i] > 57 || _age[i] < 48)
-			throw BadRequest();
+			throw Server::Exception("Please enter number for your age and try again.");
 	}
 	return stoi(_age);
 }

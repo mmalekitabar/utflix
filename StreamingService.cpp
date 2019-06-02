@@ -18,18 +18,18 @@ void StreamingService::run(int argc, char **argv)
 	try {
 		MyServer server(argc > 1 ? atoi(argv[1]) : 5000);
 		server.setNotFoundErrPage("static/404.html");
-		server.get("/", new ShowPage("static/logincss.html"));
-		server.get("/login", new ShowPage("static/logincss.html"));
+		server.get("/", new ShowPage("static/login.html"));
+		server.get("/login", new ShowPage("static/login.html"));
 		server.post("/login", new LoginHandler());
-		//server.get("/signup", new ShowPage("static/logincss.html"));
-		//server.post("/signup", new LoginHandler());
-		//server.get("/pub_home", new ShowPage("static/logincss.html"));
+		server.get("/signup", new ShowPage("static/signup.html"));
+		server.post("/signup", new SignupHandler());
+		server.get("/pub_home", new ShowPage("static/pub_home.html"));
 		//server.post("/pub_home", new LoginHandler());
 		//server.get("/film_submit", new ShowPage("static/logincss.html"));
 		//server.post("/film_submit", new LoginHandler());
 		//server.get("/pub_profile", new ShowPage("static/logincss.html"));
 		//server.post("/pub_profile", new LoginHandler());
-		//server.get("/cos_home", new ShowPage("static/logincss.html"));
+		server.get("/cos_home", new ShowPage("static/cos_home.html"));
 		//server.post("/cos_home", new LoginHandler());
 		//server.get("/cos_profile", new ShowPage("static/logincss.html"));
 		//server.post("/cos_profile", new LoginHandler());
