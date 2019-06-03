@@ -18,11 +18,13 @@ void StreamingService::run(int argc, char **argv)
 	try {
 		MyServer server(argc > 1 ? atoi(argv[1]) : 5000);
 		server.setNotFoundErrPage("static/404.html");
-		server.get("/", new ShowPage("static/login.html"));
-		server.get("/login", new ShowPage("static/login.html"));
+		server.get("/", new ShowLogin());
+		server.get("/login", new ShowLogin());
 		server.post("/login", new LoginHandler());
 		server.get("/signup", new ShowPage("static/signup.html"));
 		server.post("/signup", new SignupHandler());
+		server.get("/logout", new LogoutHandler());
+		server.post("/logout", new LogoutHandler());
 		server.get("/pub_home", new ShowPage("static/pub_home.html"));
 		//server.post("/pub_home", new LoginHandler());
 		//server.get("/film_submit", new ShowPage("static/logincss.html"));

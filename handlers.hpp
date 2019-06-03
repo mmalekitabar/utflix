@@ -20,6 +20,11 @@ public:
   Response *callback(Request *);
 };
 
+class LogoutHandler : public RequestHandler {
+public:
+  Response *callback(Request *);
+};
+
 class UploadHandler : public RequestHandler {
 public:
   Response *callback(Request *);
@@ -36,9 +41,9 @@ public:
   Response *callback(Request *);
 };
 
-class Show_login
-{
-
+class ShowLogin : public RequestHandler {
+public:
+  Response *callback(Request *);
 };
 
 #endif

@@ -24,6 +24,7 @@ public:
 	void notif_to_user(int user_id, std::string notif);
 	void pay_debt_system(int debt);
 	int id_generator();
+	int get_last_id();
 	std::string email_adjust(std::string _email);
 	std::string username_adjust(std::string _username);
 	std::string password_adjust(std::string _password);

@@ -1,6 +1,22 @@
 #include "handlers.hpp"
+#define NUM_START 48
+#define NUM_END 57
+#define START 0
+#define EMPTY 0
 
 using namespace std;
+
+int to_num(string snum)
+{
+  if(snum.size() == EMPTY)
+    return 0;
+  for(int i = START; i < snum.size(); i++)
+  {
+    if(snum[i] > NUM_END || snum[i] < NUM_START)
+      return -1;
+  }
+  return stoi(snum);
+}
 
 Response *RandomNumberHandler::callback(Request *req) {
   Response *res = new Response;
@@ -25,16 +41,31 @@ Response *RandomNumberHandler::callback(Request *req) {
 }
 
 Response *LoginHandler::callback(Request *req) {
-  string username = req->getBodyParam("username");
-  string password = req->getBodyParam("password");
-  //int sid = 
-  Response *res = Response::redirect("/pub_home");
-  res->setSessionId("SID");
+  UsersRepository* users_repository = users_repository->get_users_rep();
+  int end_id = users_repository->get_last_id();
+  if(to_num(req->getSessionId()) < end_id && to_num(req->getSessionId()) > 0)
+    throw Server::Exception("There is someone loggedin at the moment.");
+  map<string, string> informations;
+  informations["username"] = req->getBodyParam("username");
+  informations["password"] = req->getBodyParam("password");
+  User* loggingin = users_repository->login_check(informations);
+  int sid;
+  if(!loggingin)
+    sid = loggingin->get_id();
+  Response *res;
+  if(loggingin->is_publisher())
+    res = Response::redirect("/pub_home");
+  else
+    res = Response::redirect("/cos_home");
+  res->setSessionId(to_string(sid));
   return res;
 }
 
 Response *SignupHandler::callback(Request *req) {
   UsersRepository* users_repository = users_repository->get_users_rep();
+  int end_id = users_repository->get_last_id();
+  if(to_num(req->getSessionId()) < end_id && to_num(req->getSessionId()) > 0)
+    throw Server::Exception("There is someone loggedin at the moment.");
   map<string, string> informations;
   informations["username"] = req->getBodyParam("username");
   informations["password"] = req->getBodyParam("password");
@@ -53,6 +84,41 @@ Response *SignupHandler::callback(Request *req) {
   else
     res = Response::redirect("/cos_home");
   res->setSessionId(to_string(sid));
+  return res;
+}
+
+Response *LogoutHandler::callback(Request *req) {
+  if(req->getSessionId().size() == 0)
+    throw Server::Exception("There is nobody loggedin at the moment.");
+  Response *res = Response::redirect("/login");
+  res->setSessionId("");
+  return res;
+}
+
+Response *ShowLogin::callback(Request *req) {
+  UsersRepository* users_repository = users_repository->get_users_rep();
+  int end_id = users_repository->get_last_id();
+  if(to_num(req->getSessionId()) < end_id && to_num(req->getSessionId()) > 0)
+    throw Server::Exception("There is someone loggedin at the moment.");
+  Response *res = new Response;
+  res->setHeader("Content-Type", "text/html");
+  string body;
+  body += "<!DOCTYPE html>";
+  body += "<html>";
+  body += "<body style=\"text-align: center;\">";
+  body += "<h1>UTFLIX</h1>";
+  body += "<div style=\"background-color: lightblue; padding: 1%; max-width: 300px; border-radius: 3px; margin: auto; \">";
+  body += "<form action=\"/login\" method=\"post\">";
+  body += "<p>Login</p>";
+  body += "<input name=\"username\" type=\"text\" required placeholder=\"Username\" style=\"display:block; margin: auto; margin-bottom: 10px; padding: 5px; width: 94%; \"  />";
+  body += "<input name=\"password\" type=\"password\" required placeholder=\"Password\" style=\"display:block; margin: auto; margin-bottom: 30px; padding: 5px; width: 94%; \" />";
+  body += "<button type=\"submit\" style=\"display:block; width: 100%; padding: 7px;\">Login</button>";
+  body += "<a href=\"http://localhost:5000/signup\">Signup</a>";
+  body += "</form>";
+  body += "</div>";
+  body += "</body>";
+  body += "</html>";
+  res->setBody(body);
   return res;
 }
 

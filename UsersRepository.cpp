@@ -40,8 +40,6 @@ User* UsersRepository::add_user(std::map<std::string, std::string>  informations
 
 User* UsersRepository::login_check(std::map<std::string, std::string> informations)
 {
-	if(informations["username"].size() == 0)
-		throw BadRequest();
 	for(int i = 0; i < users.size(); i++)
 	{
 		if(users[i]->get_username() == informations["username"])
@@ -49,10 +47,10 @@ User* UsersRepository::login_check(std::map<std::string, std::string> informatio
 			if(users[i]->get_password() == informations["password"]){
 				return users[i];
 			}
-			throw BadRequest(); 
+			throw Server::Exception("Your password is wrong.");
 		}
 	}
-	throw NotFound();
+	throw Server::Exception("Username does not exist.");
 }
 
 void UsersRepository::print_by_ids(std::vector<int> ids)
@@ -142,10 +140,13 @@ int UsersRepository::id_generator()
 	return last_id;
 }
 
+int UsersRepository::get_last_id()
+{
+	return last_id;
+}
+
 std::string UsersRepository::email_adjust(std::string _email)
 {
-	if(_email.size() == 0)
-		throw Server::Exception("Please enter email.");
 	const std::regex email_pattern
    	("(\\w+)(\\.|_)?(\\w*)@(\\w+)(\\.(\\w+))+");
    	if(std::regex_match(_email, email_pattern))
@@ -155,8 +156,6 @@ std::string UsersRepository::email_adjust(std::string _email)
 
 std::string UsersRepository::username_adjust(std::string _username)
 {
-	if(_username.size() == 0)
-		throw Server::Exception("Please enter username.");
 	for(int i = 0; i < users.size(); i++)
 	{
 		if(users[i]->get_username() == _username)
@@ -167,15 +166,11 @@ std::string UsersRepository::username_adjust(std::string _username)
 
 std::string UsersRepository::password_adjust(std::string _password)
 {
-	if(_password.size() == 0)
-		throw Server::Exception("Please enter password.");
 	return _password;
 }
 
 int UsersRepository::age_adjust(std::string _age)
 {
-	if(_age.size() == 0)
-		throw Server::Exception("Please enter your age.");
 	for(int i = 0; i < _age.size(); i++)
 	{
 		if(_age[i] > 57 || _age[i] < 48)
