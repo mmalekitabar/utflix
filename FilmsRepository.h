@@ -6,11 +6,15 @@
 #include <string>
 #include "Exceptions.h"
 #include "Film.h"
+#include "./server/server.hpp"
 
 class FilmsRepository
 {
 public:
 	FilmsRepository();
+	static FilmsRepository* get_films_rep();
+	std::vector<Film*> get_films();
+	Film* get_film(int film_id);
 	int add_film(std::map<std::string, std::string> informations, int publisher_id);
 	void recom_table_expand(int curr_id);
 	void edit_film(std::map<std::string, std::string> informations);
@@ -38,6 +42,7 @@ public:
 	int get_film_num();
 	void update_recom_table(int film_id, std::vector<int> mutals);
 private:
+	static FilmsRepository* main_repository;
 	int last_id;
 	std::vector<Film*> films;
 	std::vector<std::vector<int>> recom_table;

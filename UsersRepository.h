@@ -30,6 +30,7 @@ public:
 	std::string password_adjust(std::string _password);
 	int age_adjust(std::string _age);
 	std::vector<int> get_mutals(int film_id, int films_num);
+	bool check_is_publisher(int user_id);
 private:
 	static UsersRepository* main_repository;
 	std::vector<User*> users;

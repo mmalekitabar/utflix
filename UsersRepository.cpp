@@ -17,6 +17,10 @@ UsersRepository* UsersRepository::get_users_rep()
 	return main_repository;
 }
 
+bool UsersRepository::check_is_publisher(int user_id)
+{
+	return users[user_id - 1]->is_publisher();
+}
 
 User* UsersRepository::add_user(std::map<std::string, std::string>  informations)
 {

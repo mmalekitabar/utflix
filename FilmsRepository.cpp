@@ -29,9 +29,36 @@
 #define NOT_CHECKED 0
 #define FOUR_TIMES 4
 
+FilmsRepository* FilmsRepository::main_repository;
+
 FilmsRepository::FilmsRepository()
 {
 	last_id = ONE;
+}
+
+FilmsRepository* FilmsRepository::get_films_rep()
+{
+	if(!main_repository)
+	{
+		main_repository = new FilmsRepository();
+	}
+	return main_repository;
+}
+
+std::vector<Film*> FilmsRepository::get_films()
+{
+	return films;
+}
+
+Film* FilmsRepository::get_film(int film_id)
+{
+	for(int i = START; i < films.size(); i++)
+	{
+		if(film_id == films[i]->get_id())
+		{
+			return films[i];
+		}
+	}
 }
 
 int FilmsRepository::add_film(std::map<std::string, std::string> informations, int publisher_id)
@@ -316,20 +343,16 @@ int FilmsRepository::id_generator()
 
 int FilmsRepository::num_adjust(std::string num)
 {
-	if(num.size() == EMPTY)
-		throw BadRequest();
 	for(int i = START; i < num.size(); i++)
 	{
 		if(num[i] > NUM_END || num[i] < NUM_START)
-			throw BadRequest();
+			throw Server::Exception("Type of data you entered is not right.");
 	}
 	return stoi(num);
 }
 
 std::string FilmsRepository::string_adjust(std::string str)
 {
-	if(str.size() == EMPTY)
-		throw BadRequest();
 	return str;
 }
 
@@ -394,7 +417,7 @@ bool FilmsRepository::price_check(std::string s_price, int price)
 	for(int i = START; i < s_price.size(); i++)
 	{
 		if(s_price[i] > NUM_END || s_price[i] < NUM_START)
-			throw BadRequest();
+			throw Server::Exception("Renter the price.");
 	}
 	if(stod(s_price) >= price)
 		return true;
