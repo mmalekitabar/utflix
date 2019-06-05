@@ -45,6 +45,16 @@ public:
   Response *callback(Request *);
 };
 
+class ChargeWalletHandler : public RequestHandler {
+public:
+  Response *callback(Request *);
+};
+
+class ReceiveDebtHandler : public RequestHandler {
+public:
+  Response *callback(Request *);
+};
+
 class ShowLogin : public RequestHandler {
 public:
   Response *callback(Request *);
@@ -81,6 +91,16 @@ public:
 };
 
 class ShowNotifications : public RequestHandler {
+public:
+  Response *callback(Request *);
+};
+
+class ShowPubBank : public RequestHandler {
+public:
+  Response *callback(Request *);
+};
+
+class ShowCusBank : public RequestHandler {
 public:
   Response *callback(Request *);
 };

@@ -35,7 +35,10 @@ void StreamingService::run(int argc, char **argv)
 		server.get("/notifications", new ShowNotifications());
 		server.post("/buy", new BuyHandler());
 		server.post("/rate", new RateHandler());
-		//rating
+		server.get("/pub_bank", new ShowPubBank());
+		server.get("/cus_bank", new ShowCusBank());
+		server.post("/charge_wallet", new ChargeWalletHandler());
+		server.post("/receive_debt", new ReceiveDebtHandler());
 		//comment and reply and delete comment
 		//followers and following
 		//published and delete and edit

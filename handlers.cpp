@@ -326,6 +326,67 @@ Response *RateHandler::callback(Request *req) {
   return res;
 }
 
+Response *ChargeWalletHandler::callback(Request *req) {
+  UsersRepository* users_repository = users_repository->get_users_rep();
+  FilmsRepository* films_repository = films_repository->get_films_rep();
+  int end_id = users_repository->get_last_id();
+  if(to_num(req->getSessionId()) >= end_id || to_num(req->getSessionId()) <= 0)
+    throw Server::Exception("There is nobody loggedin at the moment.");
+  User* active_user = users_repository->get_user(stoi(req->getSessionId()));
+  active_user->add_money(req->getBodyParam("amount"));
+  Response *res = new Response;
+  res->setHeader("Content-Type", "text/html");
+  string body;
+  body += "<!DOCTYPE html>";
+  body += "<html>";
+  body += "<body style=\"text-align: center;\">";
+  body += "<p style = \"font-size: 15px;\">You`ve Charged Your Acount.</p>";
+  if(active_user->is_publisher())
+    body += "<form action=\"/pub_bank\" method=\"get\">";
+  else
+    body += "<form action=\"/cus_bank\" method=\"get\">";
+  body += "<button type=\"submit\" style=\"display:block; width: 100%; padding: 7px;\">My Wallet</button>";
+  body += "</form>";
+  if(active_user->is_publisher())
+    body += "<form action=\"/pub_home\" method=\"get\">";
+  else
+    body += "<form action=\"/cus_home\" method=\"get\">";
+  body += "<button type=\"submit\" style=\"display:block; width: 100%; padding: 7px;\">Home Page</button>";
+  body += "</form>";
+  body += "</body>";
+  body += "</html>";
+  res->setBody(body);
+  return res;
+}
+
+Response *ReceiveDebtHandler::callback(Request *req) {
+  UsersRepository* users_repository = users_repository->get_users_rep();
+  FilmsRepository* films_repository = films_repository->get_films_rep();
+  int end_id = users_repository->get_last_id();
+  if(to_num(req->getSessionId()) >= end_id || to_num(req->getSessionId()) <= 0)
+    throw Server::Exception("There is nobodey loggedin at the moment.");
+  User* active_user = users_repository->get_user(stoi(req->getSessionId()));
+  users_repository->pay_debt_system(active_user->get_debt());
+  active_user->receive_money();
+  Response *res = new Response;
+  res->setHeader("Content-Type", "text/html");
+  string body;
+  body += "<!DOCTYPE html>";
+  body += "<html>";
+  body += "<body style=\"text-align: center;\">";
+  body += "<p style = \"font-size: 15px;\">Your Debt Has Been Received.</p>";
+  body += "<form action=\"/pub_bank\" method=\"get\">";
+  body += "<button type=\"submit\" style=\"display:block; width: 100%; padding: 7px;\">My Wallet</button>";
+  body += "</form>";
+  body += "<form action=\"/pub_home\" method=\"get\">";
+  body += "<button type=\"submit\" style=\"display:block; width: 100%; padding: 7px;\">Home Page</button>";
+  body += "</form>";
+  body += "</body>";
+  body += "</html>";
+  res->setBody(body);
+  return res;
+}
+
 Response *LogoutHandler::callback(Request *req) {
   if(req->getSessionId().size() == 0)
     throw Server::Exception("There is nobody loggedin at the moment.");
@@ -539,6 +600,7 @@ Response *ShowPubProfile::callback(Request *req) {
     body += "</td></tr>";
   }
   body += "</table>";
+  body += "<a href=\"http://localhost:5000/pub_bank\">My Wallet</a>";
   //body += "<a href=\"http://localhost:5000/film_submit\">Followers  /</a>";
   //body += "<a href=\"http://localhost:5000/pub_profile\">/  My Profile  /</a>";
   //body += "<a href=\"http://localhost:5000/notifications\">/  Notifications</a>";
@@ -654,7 +716,7 @@ Response *ShowCusProfile::callback(Request *req) {
     body += "</td></tr>";
   }
   body += "</table>";
-  
+  body += "<a href=\"http://localhost:5000/cus_bank\">My Wallet</a>";
   body += "</body>";
   body += "</html>";
   res->setBody(body);
@@ -713,6 +775,85 @@ Response *ShowNotifications::callback(Request *req) {
     body += "</td></tr>";
   }
   body += "</table>";
+  body += "</body>";
+  body += "</html>";
+  res->setBody(body);
+  return res;
+}
+
+Response *ShowPubBank::callback(Request *req) {
+  UsersRepository* users_repository = users_repository->get_users_rep();
+  User* active_user = users_repository->get_user(stoi(req->getSessionId()));
+  int end_id = users_repository->get_last_id();
+  FilmsRepository* films_repository = films_repository->get_films_rep();
+  vector<Film*> all_films = films_repository->get_films();
+  if(to_num(req->getSessionId()) >= end_id || to_num(req->getSessionId()) <= 0)
+    throw Server::Exception("Login first.");
+  if(!(users_repository->check_is_publisher(stoi(req->getSessionId()))))
+    throw Server::Exception("You can not reach this page.");
+  Response *res = new Response;
+  res->setHeader("Content-Type", "text/html");
+  string body;
+  body += "<!DOCTYPE html>";
+  body += "<html>";
+  body += "<head><style>table, td, th {  border: 1px solid #ddd;text-align: left;}table {border-collapse: collapse;width: 100%;}th, td {padding: 15px;}</style></head>";
+  body += "<body style=\"text-align: center;\">";
+  body += "<a href=\"http://localhost:5000/pub_profile\">back</a>";
+  body += "<h1>Wallet</h1>";
+  body += "<h2>publisher</h2>";
+  body += "<p style = \"font-size: 20px;\">Amount of Money in Your Wallet:</p>";
+  body += "<p style = \"font-size: 20px;\">";
+  body += to_string(active_user->get_money());
+  body += "</p>";
+  body += "<form action=\"/charge_wallet\" method=\"post\">";
+  body += "<p>Charge Wallet:</p>";
+  body += "<input name=\"amount\" type=\"text\" required placeholder=\"Amount\" style=\"display:block; margin: auto; margin-bottom: 10px; padding: 5px; width: 94%; \"  />";
+  body += "<button type=\"submit\" style=\"display:block; width: 100%; padding: 7px;\">Charge</button>";
+  body += "</form>";
+  body += "<form action=\"/receive_debt\" method=\"post\">";
+  body += "<p>Sold Film`s Money: ";
+  body += to_string(active_user->get_debt());
+  body += "</p>";
+  body += "<button type=\"submit\" style=\"display:block; width: 100%; padding: 7px;\">Receive</button>";
+  body += "</form>";
+  //body += "<a href=\"http://localhost:5000/pub_profile\">/  My Profile  /</a>";
+  //body += "<a href=\"http://localhost:5000/notifications\">/  Notifications</a>";
+  body += "</body>";
+  body += "</html>";
+  res->setBody(body);
+  return res;
+}
+
+Response *ShowCusBank::callback(Request *req) {
+  UsersRepository* users_repository = users_repository->get_users_rep();
+  User* active_user = users_repository->get_user(stoi(req->getSessionId()));
+  int end_id = users_repository->get_last_id();
+  FilmsRepository* films_repository = films_repository->get_films_rep();
+  vector<Film*> all_films = films_repository->get_films();
+  if(to_num(req->getSessionId()) >= end_id || to_num(req->getSessionId()) <= 0)
+    throw Server::Exception("Login first.");
+  if(users_repository->check_is_publisher(stoi(req->getSessionId())))
+    throw Server::Exception("You can not reach this page.");
+  Response *res = new Response;
+  res->setHeader("Content-Type", "text/html");
+  string body;
+  body += "<!DOCTYPE html>";
+  body += "<html>";
+  body += "<head><style>table, td, th {  border: 1px solid #ddd;text-align: left;}table {border-collapse: collapse;width: 100%;}th, td {padding: 15px;}</style></head>";
+  body += "<body style=\"text-align: center;\">";
+  body += "<a href=\"http://localhost:5000/cus_profile\">back</a>";
+  body += "<h1>Wallet</h1>";
+  body += "<h2>costumer</h2>";
+  body += "<p style = \"font-size: 20px;\">Amount of Money in Your Wallet:</p>";
+  body += "<p style = \"font-size: 20px;\">";
+  body += to_string(active_user->get_money());
+  body += "</p>";
+  body += "<form action=\"/charge_wallet\" method=\"post\">";
+  body += "<p>Charge Wallet:</p>";
+  body += "<input name=\"amount\" type=\"text\" required placeholder=\"Amount\" style=\"display:block; margin: auto; margin-bottom: 10px; padding: 5px; width: 94%; \"  />";
+  body += "<button type=\"submit\" style=\"display:block; width: 100%; padding: 7px;\">Charge</button>";
+  body += "</form>";
+  
   body += "</body>";
   body += "</html>";
   res->setBody(body);
