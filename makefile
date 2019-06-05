@@ -27,25 +27,25 @@ $(BUILD_DIR)/server.o: server/server.cpp server/server.hpp server/route.hpp util
 $(BUILD_DIR)/route.o: server/route.cpp server/route.hpp utils/utilities.hpp utils/response.hpp utils/request.hpp utils/include.hpp
 	$(CC) $(CF) -c server/route.cpp -o $(BUILD_DIR)/route.o
 
-$(BUILD_DIR)/StreamingService.o: StreamingService.cpp StreamingService.h Controller.h
+$(BUILD_DIR)/StreamingService.o: StreamingService.cpp StreamingService.h Controller.h server/server.hpp
 	$(CC) $(CF) -c StreamingService.cpp -o $(BUILD_DIR)/StreamingService.o
 
 $(BUILD_DIR)/Controller.o: Controller.cpp Controller.h UsersRepository.h CommentsRepository.h FilmsRepository.h Exceptions.h
 	$(CC) $(CF) -c Controller.cpp -o $(BUILD_DIR)/Controller.o
 
-$(BUILD_DIR)/UsersRepository.o: UsersRepository.cpp UsersRepository.h User.h Publisher.h Exceptions.h
+$(BUILD_DIR)/UsersRepository.o: UsersRepository.cpp UsersRepository.h User.h Publisher.h Exceptions.h server/server.hpp
 	$(CC) $(CF) -c UsersRepository.cpp -o $(BUILD_DIR)/UsersRepository.o
 
-$(BUILD_DIR)/FilmsRepository.o: FilmsRepository.cpp FilmsRepository.h Film.h Exceptions.h
+$(BUILD_DIR)/FilmsRepository.o: FilmsRepository.cpp FilmsRepository.h Film.h Exceptions.h server/server.hpp
 	$(CC) $(CF) -c FilmsRepository.cpp -o $(BUILD_DIR)/FilmsRepository.o
 
 $(BUILD_DIR)/CommentsRepository.o: CommentsRepository.cpp CommentsRepository.h Comment.h
 	$(CC) $(CF) -c CommentsRepository.cpp -o $(BUILD_DIR)/CommentsRepository.o
 
-$(BUILD_DIR)/Film.o: Film.cpp Film.h Exceptions.h
+$(BUILD_DIR)/Film.o: Film.cpp Film.h Exceptions.h server/server.hpp
 	$(CC) $(CF) -c Film.cpp -o $(BUILD_DIR)/Film.o
 
-$(BUILD_DIR)/User.o: User.cpp User.h
+$(BUILD_DIR)/User.o: User.cpp User.h server/server.hpp
 	$(CC) $(CF) -c User.cpp -o $(BUILD_DIR)/User.o
 
 $(BUILD_DIR)/Publisher.o: Publisher.cpp Publisher.h User.h

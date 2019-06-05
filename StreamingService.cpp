@@ -42,12 +42,12 @@ void StreamingService::run(int argc, char **argv)
 		server.post("/charge_wallet", new ChargeWalletHandler());
 		server.post("/receive_debt", new ReceiveDebtHandler());
 		server.get("/published_films", new ShowPublishedFilms());
-		
+		server.post("/delete_film", new DeleteFilmHandler());
+		server.post("/edit_film", new EditFilmHandler());
+		server.get("/edit_film", new ShowEditFilm());
 		//comment and reply and delete comment
 		//followers and following
 		//delete and edit
-		//purchased
-		//film showing filters
 		server.run();
   } catch (Server::Exception e) {
     std::cerr << e.getMessage() << std::endl;

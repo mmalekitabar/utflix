@@ -55,6 +55,21 @@ public:
   Response *callback(Request *);
 };
 
+class DeleteFilmHandler : public RequestHandler {
+public:
+  Response *callback(Request *);
+};
+
+class EditFilmHandler : public RequestHandler {
+public:
+  Response *callback(Request *);
+};
+
+class ShowEditFilm : public RequestHandler {
+public:
+  Response *callback(Request *);
+};
+
 class ShowLogin : public RequestHandler {
 public:
   Response *callback(Request *);

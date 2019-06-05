@@ -5,6 +5,7 @@
 #include <iostream>
 #include <vector>
 #include "Exceptions.h"
+#include "./server/server.hpp"
 
 class User
 {

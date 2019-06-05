@@ -686,7 +686,7 @@ Response *ShowPubProfile::callback(Request *req) {
   body += "My Profile";
   body += "</h2>";
   body += "<div style=\"background-color: rgb(159, 200, 247); padding: 1%; max-width: 800px; border-radius: 20px; margin: auto; \">";
-  body += "<h3 style=\"font-family:georgia,garamond,serif; color: rgb(180, 199, 74);\"> ";
+  body += "<h3 style=\"font-family:georgia,garamond,serif;\"> ";
   body += "My Purchased Films";
   body += "</h3>";
   body += "<table>";
@@ -868,6 +868,9 @@ Response *ShowCusProfile::callback(Request *req) {
   body += "My Profile";
   body += "</h2>";
   body += "<div style=\"background-color: rgb(159, 200, 247); padding: 1%; max-width: 800px; border-radius: 20px; margin: auto; \">";
+  body += "<h3 style=\"font-family:georgia,garamond,serif;\"> ";
+  body += "My Purchased Films";
+  body += "</h3>";
   body += "<table>";
   body += "<tr>";
   body += "<th>#.</th>";
@@ -1154,7 +1157,7 @@ Response *ShowPublishedFilms::callback(Request *req) {
         body += "</td><td>";
         body += all_films[i]->get_director();
         body += "</td><td>";
-        body += "<form action=\"/edit_film\" method=\"post\">";
+        body += "<form action=\"/edit_film\" method=\"get\">";
         body += "<button type=\"submit\" style=\"display:block; width: 100%; padding: 7px;\">Edit</button>";
         body += "<input type=\"hidden\" name=\"id\" value=\"";
         body += to_string(all_films[i]->get_id());
@@ -1179,3 +1182,82 @@ Response *ShowPublishedFilms::callback(Request *req) {
   res->setBody(body);
   return res;
 }
+
+Response *EditFilmHandler::callback(Request *req) {
+  UsersRepository* users_repository = users_repository->get_users_rep();
+  int end_id = users_repository->get_last_id();
+  FilmsRepository* films_repository = films_repository->get_films_rep();
+  if(to_num(req->getSessionId()) >= end_id || to_num(req->getSessionId()) <= 0)
+    throw Server::Exception("Login first.");
+  if(!(users_repository->check_is_publisher(stoi(req->getSessionId()))))
+    throw Server::Exception("You can not reach this page.");
+  map<string, string> informations;
+  informations["film_id"] = req->getBodyParam("id");
+  informations["name"] = req->getBodyParam("name");
+  informations["year"] = req->getBodyParam("year");
+  informations["length"] = req->getBodyParam("length");
+  informations["director"] = req->getBodyParam("director");
+  informations["summary"] = req->getBodyParam("summary");
+  films_repository->edit_film(informations);
+  Response *res = Response::redirect("/published_films");
+  return res;
+}
+
+Response *DeleteFilmHandler::callback(Request *req) {
+  UsersRepository* users_repository = users_repository->get_users_rep();
+  int end_id = users_repository->get_last_id();
+  FilmsRepository* films_repository = films_repository->get_films_rep();
+  if(to_num(req->getSessionId()) >= end_id || to_num(req->getSessionId()) <= 0)
+    throw Server::Exception("Login first.");
+  if(!(users_repository->check_is_publisher(stoi(req->getSessionId()))))
+    throw Server::Exception("You can not reach this page.");
+  map<string, string> informations;
+  films_repository->delete_film(req->getBodyParam("id"));
+  Response *res = Response::redirect("/published_films");
+  return res;
+}
+
+
+Response *ShowEditFilm::callback(Request *req) {
+  UsersRepository* users_repository = users_repository->get_users_rep();
+  int end_id = users_repository->get_last_id();
+  FilmsRepository* films_repository = films_repository->get_films_rep();
+  if(to_num(req->getSessionId()) >= end_id || to_num(req->getSessionId()) <= 0)
+    throw Server::Exception("Login first.");
+  if(!(users_repository->check_is_publisher(stoi(req->getSessionId()))))
+    throw Server::Exception("You can not reach this page.");
+  Response *res = new Response;
+  res->setHeader("Content-Type", "text/html");
+  string body;
+  body += "<!DOCTYPE html>";
+  body += "<html>";
+  body += "<body style=\"text-align: center; background-image: url(back.jpeg); ";
+  body += "background-repeat: no-repeat; background-size: cover;\">";
+  body += "<a href=\"http://localhost:5000/logout\">Logout</a>";
+  body += "<h1 style=\"font-family:georgia,garamond,serif; color: rgb(180, 199, 74);\"> ";
+  body += "UTFLIX";
+  body += "</h1>";
+  body += "<h2 style=\"font-family:georgia,garamond,serif; color: rgb(180, 199, 74);\"> ";
+  body += "Edit Film";
+  body += "</h2>";
+  body += "<div style=\"background-color: rgb(159, 200, 247); padding: 1%; max-width: 300px; border-radius: 20px; margin: auto; \">";
+  body += "<form action=\"/edit_film\" method=\"post\">";
+  body += "<p>Edit</p>";
+  body += "<input name=\"name\" type=\"text\"  placeholder=\"Name\" style=\"display:block; margin: auto; margin-bottom: 10px; padding: 5px; width: 94%;\" />";
+  body += "<input name=\"length\" type=\"text\" placeholder=\"Length\" style=\"display:block; margin: auto; margin-bottom: 10px; padding: 5px; width: 94%;\" />";
+  body += "<input name=\"price\" type=\"text\" placeholder=\"Price\" style=\"display:block; margin: auto; margin-bottom: 10px; padding: 5px; width: 94%;\" />";
+  body += "<input name=\"year\" type=\"text\" placeholder=\"Production Year\" style=\"display:block; margin: auto; margin-bottom: 10px; padding: 5px; width: 94%;\" />";
+  body += "<input name=\"director\" type=\"text\" placeholder=\"Director\" style=\"display:block; margin: auto; margin-bottom: 10px; padding: 5px; width: 94%;\" />";
+  body += "<input name=\"summary\" type=\"text\" placeholder=\"Summary\" style=\"display:block; margin: auto; margin-bottom: 10px; padding: 5px; width: 94%;\" />";
+  body += "<input type=\"hidden\" name=\"id\" value=\"";
+  body += req->getQueryParam("id");
+  body += "\">";
+  body += "<button type=\"submit\" style=\"display:block; width: 100%; padding: 7px;\">Edit</button>";
+  body += "</form>";
+  body += "</div>";
+  body += "</body>";
+  body += "</html>";
+  res->setBody(body);
+  return res;
+}
+

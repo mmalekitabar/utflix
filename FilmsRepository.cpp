@@ -300,7 +300,7 @@ int FilmsRepository::find_film_pub(std::string film_id)
 		if(f_id == films[i]->get_id() && films[i]->sell_status())
 			return films[i]->get_pub_id();
 	}
-	throw NotFound();
+	throw Server::Exception("Film not found.");
 }
 
 int FilmsRepository::find_film_price(std::string film_id)
@@ -311,7 +311,7 @@ int FilmsRepository::find_film_price(std::string film_id)
 		if(f_id == films[i]->get_id() && films[i]->sell_status())
 			return films[i]->get_price();
 	}
-	throw NotFound();
+	throw Server::Exception("Film not Found.");
 }
 
 double FilmsRepository::find_film_rate(std::string film_id)
@@ -322,7 +322,7 @@ double FilmsRepository::find_film_rate(std::string film_id)
 		if(f_id == films[i]->get_id() && films[i]->sell_status())
 			return films[i]->get_rate();
 	}
-	throw NotFound();
+	throw Server::Exception("Film not found.");
 }
 
 std::string FilmsRepository::find_film_name(std::string film_id)
@@ -333,7 +333,7 @@ std::string FilmsRepository::find_film_name(std::string film_id)
 		if(f_id == films[i]->get_id() && films[i]->sell_status())
 			return films[i]->get_name();
 	}
-	throw NotFound();
+	throw Server::Exception("film not found.");
 }
 
 int FilmsRepository::id_generator()
@@ -376,7 +376,7 @@ bool FilmsRepository::rate_check(std::string s_rate, double rate)
 	for(int i = START; i < s_rate.size(); i++)
 	{
 		if((s_rate[i] > NUM_END || s_rate[i] < NUM_START) && !(s_rate[i] == DOT))
-			throw BadRequest();
+			throw Server::Exception("Renter the rate.");
 	}
 	if(stod(s_rate) <= rate)
 		return true;
@@ -390,12 +390,12 @@ bool FilmsRepository::year_check(std::string min_year, std::string max_year, int
 	for(int i = START; i < min_year.size(); i++)
 	{
 		if(min_year[i] > NUM_END || min_year[i] < NUM_START)
-			throw BadRequest();
+			throw Server::Exception("Your filters do not match.");
 	}
 	for(int i = START; i < max_year.size(); i++)
 	{
 		if(max_year[i] > NUM_END || max_year[i] < NUM_START)
-			throw BadRequest();
+			throw Server::Exception("Your filters do not match.");
 	}
 	if(min_year.size() != EMPTY && max_year.size() != EMPTY)
 		if(year >= stoi(min_year) && year <= stoi(max_year))

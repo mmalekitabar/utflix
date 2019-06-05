@@ -27,7 +27,7 @@ User::User(int _id, std::string _email, std::string _username
 int User::buy_film(int film_price, int film_id)
 {
 	if(film_price > money)
-		throw PermissionDenied();
+		throw Server::Exception("You do not havbe enough money.");
 	for(int i = START; i < purchased_id.size(); i++)
 	{
 		if(purchased_id[i] == film_id)
@@ -80,7 +80,7 @@ int User::last_rate(int film_id)
 		if(purchased_id[i] == film_id)
 			return rate_purchased[i];
 	}
-	throw NotFound();
+	throw Server::Exception("nothing found.");
 }
 
 bool User::is_publisher()
@@ -96,11 +96,11 @@ std::string User::get_email()
 int User::num_adjust(std::string num)
 {
 	if(num.size() == EMPTY)
-		throw BadRequest();
+		throw Server::Exception("Enter something.");
 	for(int i = START; i < num.size(); i++)
 	{
 		if(num[i] > NUM_END || num[i] < NUM_START)
-			throw BadRequest();
+			throw Server::Exception("Kind of data you entered is not right.");
 	}
 	return stoi(num);
 }

@@ -1,4 +1,5 @@
 #include "Film.h"
+#include "./server/server.hpp"
 
 #define DOT "."
 #define DOT_S ". "
@@ -36,7 +37,7 @@ Film::Film(int _id, std::string _name, int _year, int _length, int _price
 void Film::change_information(std::map<std::string, std::string> informations)
 {
 	if(!is_num(informations[YEAR]) || !is_num(informations[LENGTH]))
-		throw BadRequest();
+		throw Server::Exception("Type of data you entered is not right.");
 	if(informations[NAME].size() > EMPTY)
 		name = informations[NAME];
 	if(informations[YEAR].size() > EMPTY)
@@ -81,6 +82,7 @@ int Film::get_pub_id()
 
 int Film::is_num(std::string num)
 {
+
 	for(int i = START; i < num.size(); i++)
 	{
 		if(num[i] > NUM_END || num[i] < NUM_START)
@@ -155,7 +157,7 @@ int Film::add_reply(int comment_id, std::string content)
 			return comments[i]->set_reply(content);
 		}
 	}
-	throw NotFound();
+	throw Server::Exception("Comment not found.");
 }
 
 void Film::erase_comment(int comment_id)
@@ -168,7 +170,7 @@ void Film::erase_comment(int comment_id)
 			return;
 		}
 	}
-	throw NotFound();
+	throw Server::Exception("Comment not found.");
 }
 
 void Film::print_comments()
