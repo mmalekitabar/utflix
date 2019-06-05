@@ -35,6 +35,16 @@ public:
   Response *callback(Request *);
 };
 
+class BuyHandler : public RequestHandler {
+public:
+  Response *callback(Request *);
+};
+
+class RateHandler : public RequestHandler {
+public:
+  Response *callback(Request *);
+};
+
 class ShowLogin : public RequestHandler {
 public:
   Response *callback(Request *);

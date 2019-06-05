@@ -98,13 +98,13 @@ void Controller::act_on(std::vector<std::string> input)
 		}
 		else if(input[SECOND_PART] == NOTIFICATIONS && input.size() == UNREAD_SIZE)
 		{
-			loggedin->show_notifs();
+			//loggedin->show_notifs();
 		}
 		else if(input[SECOND_PART] == NOTIFICATIONS && input.size() >= READ_SIZE)
 		{
 			for(int i = S_START; i < input.size(); i += NEXT)
 				informations[input[i - PREV]] = input[i];
-			loggedin->show_read_notifs(informations[LIMIT]);
+			//loggedin->show_read_notifs(informations[LIMIT]);
 		}
 	}
 	else if(input[FIRST_PART] == POST)

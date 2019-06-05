@@ -177,15 +177,16 @@ void FilmsRepository::print_film(std::string film_id, std::vector<int> purchased
 				<< "Comments" << std::endl;
 			films[i]->print_comments();
 			std::cout << std::endl << RECOMMENDATION << std::endl;
-			recommendation_print(films[i]->get_id(), purchased_id);
+			//recommendation_print(films[i]->get_id(), purchased_id);
 			return;
 		}
 	}
 	throw NotFound();
 }
 
-void FilmsRepository::recommendation_print(int film_id, std::vector<int> purchased_id)
+std::vector<Film*> FilmsRepository::get_film_recommendation(int film_id, std::vector<int> purchased_id)
 {
+	std::vector<Film*> recom_films;
 	std::cout << RECOM_HEADER << std::endl;
 	int checked = NOT_CHECKED;
 	std::vector<int> mutal_seens;
@@ -222,13 +223,12 @@ void FilmsRepository::recommendation_print(int film_id, std::vector<int> purchas
 		}
 		if(max != NOT_EXISTING)
 		{
-		mutal_seens[max_num] = NOT_ALLOWED;
-		std::cout << n + ONE << DOT_S << films[max_num]->get_id() << LINE 
-			<< films[max_num]->get_name() << LINE << films[max_num]->get_length() 
-			<< LINE << films[max_num]->get_director() << std::endl;
+			mutal_seens[max_num] = NOT_ALLOWED;
+			recom_films.push_back(films[max_num]);
 		}
 		recommend_num++;
 	}
+	return recom_films;
 }
 
 void FilmsRepository::rate_film(int film_id, std::string s_rate, int last_rate)

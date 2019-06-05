@@ -32,8 +32,8 @@ public:
 	bool is_publisher();
 	bool has_not_bought(std::string film_id);
 	void add_notif(std::string notif);
-	void show_notifs();
-	void show_read_notifs(std::string limit);
+	std::vector<std::string> get_notifs();
+	std::vector<std::string> get_read_notifs();
 private:
 	int id;
 	std::string email;

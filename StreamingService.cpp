@@ -31,9 +31,18 @@ void StreamingService::run(int argc, char **argv)
 		server.get("/pub_profile", new ShowPubProfile());
 		server.get("/cus_home", new ShowCusHome());
 		server.get("/cus_profile", new ShowCusProfile());
-		//server.get("/film_detail", new ShowPage("static/logincss.html"));
 		server.post("/film_detail", new FilmDetailHandler());
 		server.get("/notifications", new ShowNotifications());
+		server.post("/buy", new BuyHandler());
+		server.post("/rate", new RateHandler());
+		//rating
+		//comment and reply and delete comment
+		//followers and following
+		//published and delete and edit
+		//purchased
+		//money add and show get for pubs
+		//film showing filters
+		//buying film
 		server.run();
   } catch (Server::Exception e) {
     std::cerr << e.getMessage() << std::endl;

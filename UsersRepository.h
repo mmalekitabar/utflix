@@ -18,6 +18,7 @@ public:
 	static UsersRepository* get_users_rep();
 	User* add_user(std::map<std::string, std::string> informations);
 	User* login_check(std::map<std::string, std::string> informations);
+	User* get_user(int user_id);
 	void print_by_ids(std::vector<int> ids);
 	void add_follower_to_pub(std::string pub_id, int follower_id);
 	void add_system_debt(int pub_id, int whole_money, double rate);

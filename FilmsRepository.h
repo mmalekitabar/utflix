@@ -26,7 +26,7 @@ public:
 	void comment_film(int film_id, std::string content, int commenter_id);
 	int reply_to_comment(int film_id, std::string comment_id, std::string content);
 	void delete_comment(int film_id, std::string comment_id);
-	void recommendation_print(int film_id, std::vector<int> purchased_id);
+	std::vector<Film*> get_film_recommendation(int film_id, std::vector<int> purchased_id);
 	int find_film_pub(std::string film_id);
 	int find_film_price(std::string film_id);
 	double find_film_rate(std::string film_id);

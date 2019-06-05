@@ -21,7 +21,7 @@ User::User(int _id, std::string _email, std::string _username
 	password = _password;
 	age = _age;
 	publisher = _publisher;
-	money = ZERO;
+	money = 1000000;
 }
 
 int User::buy_film(int film_price, int film_id)
@@ -121,26 +121,19 @@ void User::add_notif(std::string notif)
 	notifications.insert(notifications.begin(), notif);
 }
 
-void User::show_notifs()
+std::vector<std::string> User::get_notifs()
 {
-	std::cout << NOTIFICATION << std::endl;
-	for (int i = START; i < notifications.size(); i++)
-	{
-		std::cout << i + ONE << DOT_S << notifications[i] << std::endl;
-	}
+	std::vector<std::string> notif_temp;
 	for (int i = START; i < notifications.size(); i++)
 	{
 		read_notifications.insert(read_notifications.begin(), notifications[i]);
+		notif_temp.push_back(notifications[i]);
 	}
 	notifications.clear();
+	return notif_temp;
 }
 
-void User::show_read_notifs(std::string limit)
+std::vector<std::string> User::get_read_notifs()
 {
-	int lim = num_adjust(limit);
-	std::cout << NOTIFICATION << std::endl;
-	for (int i = START; i < lim; i++)
-	{
-		std::cout << i + ONE << DOT_S << read_notifications[i] << std::endl;
-	}
+	return read_notifications;
 }

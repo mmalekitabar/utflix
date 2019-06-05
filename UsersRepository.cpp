@@ -17,6 +17,17 @@ UsersRepository* UsersRepository::get_users_rep()
 	return main_repository;
 }
 
+User* UsersRepository::get_user(int user_id)
+{
+	for(int i = 0; i < users.size(); i++)
+	{
+		if(users[i]->get_id() == user_id)
+		{
+			return users[i];
+		}
+	}
+}
+
 bool UsersRepository::check_is_publisher(int user_id)
 {
 	return users[user_id - 1]->is_publisher();
