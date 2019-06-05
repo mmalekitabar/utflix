@@ -105,4 +105,9 @@ public:
   Response *callback(Request *);
 };
 
+class ShowPublishedFilms : public RequestHandler {
+public:
+  Response *callback(Request *);
+};
+
 #endif

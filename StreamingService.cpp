@@ -18,6 +18,8 @@ void StreamingService::run(int argc, char **argv)
 	try {
 		MyServer server(argc > 1 ? atoi(argv[1]) : 5000);
 		server.setNotFoundErrPage("static/404.html");
+		server.get("/profile.png", new ShowImage("profile.png"));
+		server.get("/back.jpeg", new ShowImage("back.jpeg"));
 		server.get("/", new ShowLogin());
 		server.get("/login", new ShowLogin());
 		server.post("/login", new LoginHandler());
@@ -39,13 +41,13 @@ void StreamingService::run(int argc, char **argv)
 		server.get("/cus_bank", new ShowCusBank());
 		server.post("/charge_wallet", new ChargeWalletHandler());
 		server.post("/receive_debt", new ReceiveDebtHandler());
+		server.get("/published_films", new ShowPublishedFilms());
+		
 		//comment and reply and delete comment
 		//followers and following
-		//published and delete and edit
+		//delete and edit
 		//purchased
-		//money add and show get for pubs
 		//film showing filters
-		//buying film
 		server.run();
   } catch (Server::Exception e) {
     std::cerr << e.getMessage() << std::endl;
