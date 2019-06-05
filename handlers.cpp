@@ -132,6 +132,7 @@ Response *FilmDetailHandler::callback(Request *req) {
   User* active_user = users_repository->get_user(stoi(req->getSessionId()));
   Film* showing_film = films_repository->get_film(film_id);
   vector<Film*> recom_films = films_repository->get_film_recommendation(showing_film->get_id(), active_user->get_purchased());
+  vector<string> comments = showing_film->get_comments();
   Response *res = new Response;
   res->setHeader("Content-Type", "text/html");
   string body;
@@ -200,6 +201,30 @@ Response *FilmDetailHandler::callback(Request *req) {
   }
   body += "</div>";
   body += "<div style=\"background-color: rgb(159, 200, 247); padding: 1%; max-width: 600px; border-radius: 20px; margin: auto; \">";
+  body += "<h2>Comments</h2>";
+  body += "<table>";
+  body += "<tr>";
+  body += "<th>#.</th>";
+  body += "<th>Comment</th>";
+  body += "</tr>";
+  for (int i = 0; i < comments.size(); ++i)
+  {
+    body += "<tr><td>";
+    body += to_string(i+1);
+    body += "</td><td>";
+    body += comments[i];
+    body += "</td></tr>";
+  }
+  body += "</table>";
+  body += "<form action=\"/add_comment\" method=\"post\">";
+  body += "<input name=\"comment\" type=\"text\"  placeholder=\"Your Comment\" style=\"display:block; margin: auto; margin-bottom: 10px; padding: 5px; width: 94%;\" />";
+  body += "<input type=\"hidden\" name=\"id\" value=\"";
+  body += to_string(showing_film->get_id());
+  body += "\">";
+  body += "<button type=\"submit\" style=\"display:block; width: 100%; padding: 7px;\">Post</button>";
+  body += "</form>";
+  body += "</div>";
+  body += "<div style=\"background-color: rgb(159, 200, 247); padding: 1%; max-width: 600px; border-radius: 20px; margin: auto; \">";
   body += "<h2>Recommendation</h2>";
   body += "<table>";
   body += "<tr>";
@@ -233,6 +258,32 @@ Response *FilmDetailHandler::callback(Request *req) {
   body += "</body>";
   body += "</html>";
   res->setBody(body);
+  return res;
+}
+
+Response *AddCommentHandler::callback(Request *req) {
+  UsersRepository* users_repository = users_repository->get_users_rep();
+  User* active_user = users_repository->get_user(stoi(req->getSessionId()));
+  int end_id = users_repository->get_last_id();
+  FilmsRepository* films_repository = films_repository->get_films_rep();
+  if(to_num(req->getSessionId()) >= end_id || to_num(req->getSessionId()) <= 0)
+    throw Server::Exception("Login first.");
+  films_repository->comment_film(stoi(req->getBodyParam("id")), req->getBodyParam("comment"), active_user->get_id());
+  string notif = USER;
+  notif += active_user->get_username();
+  notif += ID;
+  notif += to_string(active_user->get_id());
+  notif += COMMENT_FILM;
+  notif += films_repository->find_film_name(req->getBodyParam("id"));
+  notif += ID;
+  notif += req->getBodyParam("id");
+  notif += DOT;
+  users_repository->notif_to_user(films_repository->find_film_pub(req->getBodyParam("id")), notif);
+  Response *res;
+  if(!(users_repository->check_is_publisher(stoi(req->getSessionId()))))
+    res = Response::redirect("/cus_home");
+  else
+    res = Response::redirect("/pub_home");
   return res;
 }
 
@@ -953,7 +1004,7 @@ Response *ShowNotifications::callback(Request *req) {
   body += "Notifications";
   body += "</h2>";
   body += "<div style=\"background-color: rgb(159, 200, 247); padding: 1%; max-width: 600px; border-radius: 20px; margin: auto; \">";
-  body += "<h3 style=\"font-family:georgia,garamond,serif; color: rgb(180, 199, 74);\"> ";
+  body += "<h3 style=\"font-family:georgia,garamond,serif; \"> ";
   body += "New Notifications";
   body += "</h3>";
   body += "<table>";
@@ -972,7 +1023,7 @@ Response *ShowNotifications::callback(Request *req) {
   body += "</table>";
   body += "</div>";
   body += "<div style=\"background-color: rgb(159, 200, 247); padding: 1%; max-width: 300px; border-radius: 20px; margin: auto; \">";
-  body += "<h3 style=\"font-family:georgia,garamond,serif; color: rgb(180, 199, 74);\"> ";
+  body += "<h3 style=\"font-family:georgia,garamond,serif; \"> ";
   body += "Old Notifications";
   body += "</h3>";
   body += "<table>";
@@ -989,7 +1040,7 @@ Response *ShowNotifications::callback(Request *req) {
     body += "</td></tr>";
   }
   body += "</table>";
-  body += "/div>";
+  body += "</div>";
   body += "</body>";
   body += "</html>";
   res->setBody(body);

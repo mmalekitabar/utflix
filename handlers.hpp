@@ -30,6 +30,11 @@ public:
   Response *callback(Request *);
 };
 
+class AddCommentHandler : public RequestHandler {
+public:
+  Response *callback(Request *);
+};
+
 class FilmDetailHandler : public RequestHandler {
 public:
   Response *callback(Request *);

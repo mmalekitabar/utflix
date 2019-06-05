@@ -173,7 +173,7 @@ void Film::erase_comment(int comment_id)
 	throw Server::Exception("Comment not found.");
 }
 
-void Film::print_comments()
+std::vector<std::string> Film::get_comments()
 {
 	int comment_num = ONE;
 	for(int i = START; i < comments.size(); i++)

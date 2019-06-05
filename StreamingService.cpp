@@ -45,9 +45,7 @@ void StreamingService::run(int argc, char **argv)
 		server.post("/delete_film", new DeleteFilmHandler());
 		server.post("/edit_film", new EditFilmHandler());
 		server.get("/edit_film", new ShowEditFilm());
-		//comment and reply and delete comment
-		//followers and following
-		//delete and edit
+		server.post("/add_comment", new AddCommentHandler());
 		server.run();
   } catch (Server::Exception e) {
     std::cerr << e.getMessage() << std::endl;

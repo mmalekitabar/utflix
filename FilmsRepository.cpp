@@ -175,7 +175,7 @@ void FilmsRepository::print_film(std::string film_id, std::vector<int> purchased
 				<< "Rate = " << films[i]->get_rate() << std::endl
 				<< "Price = " << films[i]->get_price() << std::endl << std::endl
 				<< "Comments" << std::endl;
-			films[i]->print_comments();
+			//films[i]->print_comments();
 			std::cout << std::endl << RECOMMENDATION << std::endl;
 			//recommendation_print(films[i]->get_id(), purchased_id);
 			return;

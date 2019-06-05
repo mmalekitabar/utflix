@@ -34,7 +34,7 @@ public:
 	void add_comment(std::string content, int commenter);
 	int add_reply(int comment_id, std::string content);
 	void erase_comment(int comment_id);
-	void print_comments();
+	std::vector<std::string> get_comments();
 private:
 	int id;
 	std::string name;
